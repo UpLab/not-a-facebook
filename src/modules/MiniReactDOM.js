@@ -1,6 +1,6 @@
 class MiniReactDOM {
-  render(html, parent){
-    parent.innerHTML = html;
+  render(element, parent){
+    parent.append(element);
   }
 }
 
