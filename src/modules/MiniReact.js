@@ -1,8 +1,11 @@
 import { isObject } from 'lodash';
 
 class MiniReact {
-  // TODO: 2. handle events
+  // TODO: handle events
   createElement(tag, attributes, ...children){
+    if (typeof tag === 'function') {
+      return tag(attributes);
+    }
     const element = document.createElement(tag);
     if (isObject(attributes)) {
       Object.entries(attributes).forEach(([key, value]) => {
@@ -13,7 +16,14 @@ class MiniReact {
         element.setAttribute(key, value)
       });
     }
-    element.append(...children);
+
+    children.flat().forEach((child) => {
+      let childElement = child;
+      if (typeof child === 'function') {
+        childElement = child(attributes);
+      }
+      element.append(childElement);
+    });
 
     return element;
   }

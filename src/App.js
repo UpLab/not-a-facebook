@@ -1,10 +1,13 @@
 import MiniReact from './modules/MiniReact';
+import Feed from './components/Feed';
+import PostForm from './components/PostForm';
+import posts from './__mocks__/posts';
 
 const App = () => {
   return (
-    <div className="f">
-      <h1>Hello world!</h1>
-      <p>Lorem ipsum</p>
+    <div className="app">
+      <PostForm />
+      <Feed posts={posts} />
     </div>
   );
 }
