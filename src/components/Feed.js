@@ -1,4 +1,4 @@
-import MiniReact from '../modules/MiniReact';
+import React from 'react';
 
 // eslint-disable-next-line no-unused-vars
 const Post = ({ title, body }) => (
@@ -8,14 +8,12 @@ const Post = ({ title, body }) => (
   </div>
 );
 
-const Feed = ({ posts }) => {
-  return (
-    <div>
-      {posts.map((post) => (
-        <Post {...post} />
-      ))}
-    </div>
-  );
-};
+const Feed = ({ posts }) => (
+  <div>
+    {posts.map((post) => (
+      <Post {...post} />
+    ))}
+  </div>
+);
 
 export default Feed;

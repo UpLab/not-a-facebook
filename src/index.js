@@ -1,10 +1,9 @@
-import MiniReactDOM from './modules/MiniReactDOM';
+import ReactDOM from 'react-dom';
 import App from './App';
 
 document.addEventListener('DOMContentLoaded', () => {
-  MiniReactDOM.render(
+  ReactDOM.render(
     App(),
-    document.getElementById('root')
+    document.getElementById('root'),
   );
 });
-  

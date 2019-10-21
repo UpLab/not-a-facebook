@@ -4,21 +4,10 @@ module.exports = {
     "browser": true,
     "es6": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-  ],
-  "plugins": ["import"],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
+  "extends": "airbnb",
   "rules": {
-    "no-unused-vars": ["error", { "varsIgnorePattern": "MiniReact" }]
+    "react/jsx-filename-extension": 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/prop-types': 'off',
   }
 };
