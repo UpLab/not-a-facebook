@@ -1,13 +1,12 @@
 import React from 'react';
-import Feed from './components/Feed';
-import PostForm from './components/PostForm';
-import posts from './__mocks__/posts';
+import { Container } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import FeedPage from './pages/FeedPage';
 
 const App = () => (
-  <div className="app">
-    <PostForm />
-    <Feed posts={posts} />
-  </div>
+  <Container>
+    <FeedPage />
+  </Container>
 );
 
 export default App;
