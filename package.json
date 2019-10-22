@@ -4,10 +4,15 @@
   "description": "",
   "private": true,
   "scripts": {
+    "commit": "npx git-cz",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "build": "webpack",
     "start": "webpack-dev-server",
+    "release": "standard-version",
+    "release:major": "npm run release -- --release-as major",
+    "release:minor": "npm run release -- --release-as minor",
+    "release:patch": "npm run release -- --release-as patch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -22,6 +27,7 @@
     "babel-loader": "8.0.6",
     "copy-webpack-plugin": "5.0.4",
     "css-loader": "3.2.0",
+    "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.18.2",
@@ -32,6 +38,7 @@
     "html-webpack-plugin": "3.2.0",
     "node-sass": "4.12.0",
     "sass-loader": "8.0.0",
+    "standard-version": "^7.0.0",
     "style-loader": "1.0.0",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.9",
@@ -45,5 +52,10 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "reactstrap": "^8.1.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
