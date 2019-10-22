@@ -16,8 +16,8 @@ class PostFormContainer extends Component {
   }
 
   handleSubmit = (e) => {
-    const { handleAddPost } = this.props;
     e.preventDefault();
+    const { handleAddPost } = this.props;
     const post = createPost(e.target.body.value);
     handleAddPost(post);
     this.setState({ body: '' });

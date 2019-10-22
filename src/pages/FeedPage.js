@@ -1,33 +1,18 @@
 import React, { Component } from 'react';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
+import PostsModel from '../modules/posts';
 // import posts from '../__mocks__/posts';
 
 class FeedPage extends Component {
   state = {
-    posts: [],
-  }
-
-  componentDidMount() {
-    this.getPostsFromLocalStorage();
+    posts: PostsModel.get(),
   }
 
   handleAddPost = (post) => {
-    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), () => {
-      this.saveToLocalStorage();
-    });
-  }
-
-  getPostsFromLocalStorage = () => {
-    const posts = JSON.parse(localStorage.getItem('posts'));
-    if (posts) {
-      this.setState({ posts });
-    }
-  }
-
-  saveToLocalStorage = () => {
-    const { posts } = this.state;
-    localStorage.setItem('posts', JSON.stringify(posts));
+    PostsModel.add(post);
+    const posts = PostsModel.get();
+    this.setState({ posts });
   }
 
   render() {
