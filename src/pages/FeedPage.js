@@ -9,6 +9,20 @@ class FeedPage extends Component {
     posts: PostsModel.get(),
   }
 
+  componentDidMount() {
+    this.getPostsFromLoacalStorage();
+  }
+
+  getPostsFromLoacalStorage() {
+    const posts = JSON.parse(localStorage.getItem('posts'));
+
+    if (posts) { this.setState(posts); }
+  }
+
+  savePostInLoacalStorage() {
+    return localStorage.setItem('posts', JSON.stringify(this.state.posts));
+  }
+
   handleAddPost = (post) => {
     PostsModel.add(post);
     const posts = PostsModel.get();
