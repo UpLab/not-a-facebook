@@ -15,6 +15,8 @@ class FeedPage extends Component {
 
     if(posts)
       return posts;
+    else
+    return []; 
   }
 
   handleAddPost = (post) => {
