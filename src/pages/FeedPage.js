@@ -9,7 +9,18 @@ class FeedPage extends Component {
   }
 
   handleAddPost = (post) => {
-    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }));
+    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), () => this.savePosts());
+  }
+
+  savePostsLocalStorage = () => {
+    // eslint-disable-next-line react/destructuring-assignment
+    localStorage.setItem('posts', JSON.stringify(this.state.posts));
+  }
+
+  getPostsLocalStorage = () => {
+    const posts = JSON.parse(localStorage.getItem('posts'));
+    if (posts) { return posts; }
+    return [];
   }
 
   render() {
@@ -20,6 +31,11 @@ class FeedPage extends Component {
         <Feed posts={posts} />
       </>
     );
+  }
+
+  // eslint-disable-next-line react/sort-comp
+  getAcrossPost() {
+    this.setState({ posts: this.getPosts() });
   }
 }
 
