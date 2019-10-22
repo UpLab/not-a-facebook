@@ -30,7 +30,6 @@ class PostFormContainer extends Component {
 
   render() {
     const { textAreaVisible, body } = this.state;
-    // console.log({ PostFormContainer: this.state });
     return (
       <PostForm
         toggleTextArea={this.toggleTextArea}

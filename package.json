@@ -1,7 +1,6 @@
 {
   "name": "bc-2019-10-15-vanilla-todos",
   "version": "1.0.0",
-  "description": "",
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
@@ -45,5 +44,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "reactstrap": "^8.1.1"
-  }
+  },
+  "main": ".eslintrc.js",
+  "description": ""
 }
