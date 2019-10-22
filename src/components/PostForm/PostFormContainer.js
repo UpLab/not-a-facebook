@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PostForm from './PostForm';
+import { createPost } from '../../utils/creators';
 
 class PostFormContainer extends Component {
   state = {
@@ -17,20 +18,17 @@ class PostFormContainer extends Component {
   handleSubmit = (e) => {
     const { handleAddPost } = this.props;
     e.preventDefault();
-    const post = {
-      body: e.target.body.value,
-    };
+    const post = createPost(e.target.body.value);
     handleAddPost(post);
     this.setState({ body: '' });
   }
 
   handleChange = (e) => {
-    this.setState({ body: e.target.value });
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   render() {
     const { textAreaVisible, body } = this.state;
-    // console.log({ PostFormContainer: this.state });
     return (
       <PostForm
         toggleTextArea={this.toggleTextArea}
