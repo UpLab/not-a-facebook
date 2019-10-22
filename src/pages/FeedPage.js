@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 // import posts from '../__mocks__/posts';
+let posts = JSON.parse(localStorage.getItem('posts'));
 
-let posts = localStorage.getItem('posts');
-posts = posts?JSON.parse(localStorage.getItem('posts')):[];
+if(!posts)
+  posts = [];
 
 class FeedPage extends Component {
   state = {
@@ -12,9 +13,13 @@ class FeedPage extends Component {
   }
 
   handleAddPost = (post) => {
-    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }));
+    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), ()=>{
+      this.savePostInLoacalStorage();
+    });
+  }
 
-    setTimeout(()=>{ localStorage.setItem('posts', JSON.stringify(this.state.posts)); }, 2000);
+  savePostInLoacalStorage(){
+    return localStorage.setItem('posts', JSON.stringify(this.state.posts)); ;    
   }
 
   render() {
