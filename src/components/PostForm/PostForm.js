@@ -4,15 +4,6 @@ import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
 
-// function submit(e) {
-//   e.preventDefault();
-//   const post = {
-//     title: e.target.title.value,
-//     body: e.target.body.value,
-//   };
-//   alert(JSON.stringify(post));
-// }
-
 const PostForm = ({
   handleSubmit, textAreaVisible, handleChange, body, toggleTextArea,
 }) => (

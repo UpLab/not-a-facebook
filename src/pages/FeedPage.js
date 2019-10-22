@@ -8,8 +8,26 @@ class FeedPage extends Component {
     posts: [],
   }
 
+  componentDidMount() {
+    this.getPostsFromLocalStorage();
+  }
+
   handleAddPost = (post) => {
-    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }));
+    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), () => {
+      this.saveToLocalStorage();
+    });
+  }
+
+  getPostsFromLocalStorage = () => {
+    const posts = JSON.parse(localStorage.getItem('posts'));
+    if (posts) {
+      this.setState({ posts });
+    }
+  }
+
+  saveToLocalStorage = () => {
+    const { posts } = this.state;
+    localStorage.setItem('posts', JSON.stringify(posts));
   }
 
   render() {
