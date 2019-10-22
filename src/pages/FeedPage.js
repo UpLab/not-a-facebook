@@ -2,17 +2,23 @@ import React, { Component } from 'react';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 // import posts from '../__mocks__/posts';
-let posts = JSON.parse(localStorage.getItem('posts'));
 
-if(!posts)
-  posts = [];
 
 class FeedPage extends Component {
   state = {
-    posts: posts,
+    posts: this.getPostsFromLoacalStorage(),
+  }
+
+
+  getPostsFromLoacalStorage(){
+    let posts = JSON.parse(localStorage.getItem('posts'));
+
+    if(posts)
+      return posts;
   }
 
   handleAddPost = (post) => {
+
     this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), ()=>{
       this.savePostInLoacalStorage();
     });
