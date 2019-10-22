@@ -3,31 +3,32 @@ import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 // import posts from '../__mocks__/posts';
 
+console.log(JSON.parse(localStorage.getItem('posts')));
 
 class FeedPage extends Component {
   state = {
-    posts: this.getPostsFromLoacalStorage(),
+    posts: [],
   }
 
+  componentDidMount(){ 
+    this.getPostsFromLoacalStorage();
+  }
 
   getPostsFromLoacalStorage(){
     let posts = JSON.parse(localStorage.getItem('posts'));
 
     if(posts)
-      return posts;
-    else
-    return []; 
-  }
-
-  handleAddPost = (post) => {
-
-    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), ()=>{
-      this.savePostInLoacalStorage();
-    });
-  }
+      this.setState(posts);
+ }
 
   savePostInLoacalStorage(){
     return localStorage.setItem('posts', JSON.stringify(this.state.posts)); ;    
+  }
+
+  handleAddPost = (post) => {
+    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), ()=>{
+      this.savePostInLoacalStorage();
+    });
   }
 
   render() {
