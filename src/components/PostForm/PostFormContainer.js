@@ -20,6 +20,7 @@ class PostFormContainer extends Component {
     const post = {
       body: e.target.body.value,
     };
+
     handleAddPost(post);
     this.setState({ body: '' });
   }
@@ -30,7 +31,6 @@ class PostFormContainer extends Component {
 
   render() {
     const { textAreaVisible, body } = this.state;
-    // console.log({ PostFormContainer: this.state });
     return (
       <PostForm
         toggleTextArea={this.toggleTextArea}

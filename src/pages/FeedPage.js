@@ -9,7 +9,18 @@ class FeedPage extends Component {
   }
 
   handleAddPost = (post) => {
-    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }));
+    this.setState((prevState) => ({ posts: [post, ...prevState.posts] }), () => this.savePosts());
+  }
+
+  savePosts = () => {
+    localStorage.setItem('posts', JSON.stringify(this.state.posts));
+  }
+
+  getPosts = () => {
+    let posts = JSON.parse(localStorage.getItem('posts'));
+    if (posts)
+      return posts;
+    return [];
   }
 
   render() {
@@ -21,6 +32,9 @@ class FeedPage extends Component {
       </>
     );
   }
-}
 
+  componentDidMount() {
+    this.setState({ posts: this.getPosts() });
+  }
+}
 export default FeedPage;
