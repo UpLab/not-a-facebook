@@ -1,3 +1,7 @@
+import faker from 'faker';
+import _ from 'lodash';
+import db from './db';
+
 /**
  * class Collection
  * @param {string} name - name of collection
@@ -7,11 +11,9 @@
 class Collection {
   name = null
 
-  items = []
-
   constructor(name) {
-    // TODO: implement
-    this._loadFromStorage();
+    this.name = `__collection_${name}__`;
+    db.defaults({ [this.name]: [] }).write();
   }
 
   /**
@@ -22,7 +24,12 @@ class Collection {
    * @return {object} - returns document from collection with newly generated id
    */
   insert(doc) {
-    // TODO: implement
+    if (!doc.hasOwnProperty('id')) {
+      doc.id = faker.random.uuid();
+    }
+    doc.createdAt = new Date().getTime();
+    this.getCollection().push(doc).write();
+    return doc;
   }
 
   /**
@@ -32,7 +39,12 @@ class Collection {
    * @return {number} - number of removed documents
    */
   remove(selector) {
-    // TODO: implement
+    const prevSize = this.getCollectionSize();
+    if (_.isEmpty(selector)) {
+      db.set(this.name, []).write();
+    }
+    this.getCollection().remove(selector).write();
+    return prevSize - this.getCollectionSize();
   }
 
   /**
@@ -42,16 +54,14 @@ class Collection {
    * @return {object} - returns document from collection with newly generated id
    */
   find(selector) {
-    // TODO: implement
+    if (_.isEmpty(selector)) {
+      return this.getCollection().filter(selector).value();
+    }
   }
 
-  _loadFromStorage() {
-    // TODO: implement
-  }
+  getCollection = () => db.get(this.name)
 
-  _saveToStorage() {
-    // TODO: implement
-  }
+  getCollectionSize = () => this.getCollection().filter({}).value().length;
 }
 
 export default Collection;

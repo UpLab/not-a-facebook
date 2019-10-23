@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PostForm from './PostForm';
-import { createPost } from '../../utils/creators';
 
 class PostFormContainer extends Component {
   state = {
@@ -18,8 +17,7 @@ class PostFormContainer extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { handleAddPost } = this.props;
-    const post = createPost(e.target.body.value);
-    handleAddPost(post);
+    handleAddPost(e.target.body.value);
     this.setState({ body: '' });
   }
 
