@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
-
+import ButtonRemove from './ButtoRemove'
 class ButtonRemoveContainer extends Component {
 //   state = {
 // //    id: '',

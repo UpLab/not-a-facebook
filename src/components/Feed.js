@@ -1,10 +1,10 @@
 import React from 'react';
-//import { ButtonRemove } from './ButtonRemove';
+import ButtonRemove  from './ButtonRemove';
 // eslint-disable-next-line no-unused-vars
 const Post = (post) => (
   <div>
     <p>{post.body}</p>
-
+    <ButtonRemove />
   </div>
 );
 

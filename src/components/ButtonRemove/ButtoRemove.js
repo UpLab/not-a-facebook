@@ -5,7 +5,7 @@ import {
 
 const ButtonRemove = () => (
     <div className="text-right">
-      <Button type="submit" color="primary" disabled={!body}>Submit</Button>
+      <Button type="submit" color="primary" >Remove</Button>
     </div>
 );
 
