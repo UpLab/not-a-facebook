@@ -13,6 +13,7 @@ class Collection {
   constructor(name) {
     this.name = name;
     this._loadFromStorage();
+    this.remove({id: 'posts_1'});
   }
  
   /**
@@ -40,7 +41,7 @@ class Collection {
   remove(selector) {
     let prevSize = this.items.size;
     this.items = _.difference(this.items, _.filter(this.items, selector));
-    if(this.items.size === prevSize) 
+    if(_.isEmpty(selector)) 
       this.items = [];
     this._saveToStorage();
     return prevSize - this.items.size;
