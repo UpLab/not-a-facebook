@@ -6,14 +6,12 @@ import _ from 'lodash';
  * Collection is serialized and saved to localStorage. localStorage key is __collection_${name}__
  */
 class Collection {
-  name = null
 
   items = []
 
   constructor(name) {
     this.name = name;
     this._loadFromStorage();
-    this.remove({id: 'posts_1'});
   }
  
   /**
@@ -39,12 +37,12 @@ class Collection {
    * @return {number} - number of removed documents
    */
   remove(selector) {
-    let prevSize = this.items.size;
+    let prevSize = this.items.length;
     this.items = _.difference(this.items, _.filter(this.items, selector));
     if(_.isEmpty(selector)) 
       this.items = [];
     this._saveToStorage();
-    return prevSize - this.items.size;
+    return prevSize - this.items.length;
   }
 
   /**
