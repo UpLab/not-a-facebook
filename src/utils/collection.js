@@ -6,14 +6,13 @@ import _ from 'lodash';
  * Collection is serialized and saved to localStorage. localStorage key is __collection_${name}__
  */
 class Collection {
-
   items = []
 
   constructor(name) {
     this.name = name;
     this._loadFromStorage();
   }
- 
+
   /**
    * inserts document to collection.
    * it should generate a unique id prop if it is not presented in the doc.
@@ -21,9 +20,9 @@ class Collection {
    * @param {object} doc - document to insert into collection
    * @return {object} - returns document from collection with newly generated id
    */
-  insert(doc) {
-    if(!('id' in doc))
-      doc.id = _.uniqueId(this.name + '_');
+  insert(_doc) {
+    const doc = { ..._doc };
+    if (!('id' in doc)) { doc.id = _.uniqueId(`${this.name}_`); }
     doc.createdAt = new Date().getTime();
     this.items.push(doc);
     this._saveToStorage();
@@ -37,10 +36,9 @@ class Collection {
    * @return {number} - number of removed documents
    */
   remove(selector) {
-    let prevSize = this.items.length;
+    const prevSize = this.items.length;
     this.items = _.difference(this.items, _.filter(this.items, selector));
-    if(_.isEmpty(selector)) 
-      this.items = [];
+    if (_.isEmpty(selector)) { this.items = []; }
     this._saveToStorage();
     return prevSize - this.items.length;
   }
@@ -56,11 +54,11 @@ class Collection {
   }
 
   _loadFromStorage() {
-    this.items = JSON.parse(localStorage.getItem('__collection_' + this.name + '__')) || [];
+    this.items = JSON.parse(localStorage.getItem(`__collection_${this.name}__`)) || [];
   }
 
   _saveToStorage() {
-    localStorage.setItem('__collection_'+ this.name +'__', JSON.stringify(this.items));
+    localStorage.setItem(`__collection_${this.name}__`, JSON.stringify(this.items));
   }
 }
 

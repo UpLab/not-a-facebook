@@ -26,7 +26,7 @@ class FeedPage extends Component {
     return (
       <>
         <PostForm handleAddPost={this.handleAddPost} />
-        <Feed posts={posts} handleRemovePost={this.handleRemovePost}/>
+        <Feed posts={posts} handleRemovePost={this.handleRemovePost} />
       </>
     );
   }
