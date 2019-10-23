@@ -15,9 +15,9 @@ const PostForm = ({
       </FormGroup>
     )}
     <div className="text-right">
+      <Button type="button" onClick={toggleTextArea} style={{ margin: '15px' }}>Toggle Text Area</Button>
       <Button type="submit" color="primary" disabled={!body}>Submit</Button>
     </div>
-    <Button type="button" onClick={toggleTextArea}>Toggle Text Area</Button>
   </Form>
 );
 

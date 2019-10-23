@@ -15,12 +15,18 @@ class FeedPage extends Component {
     this.setState({ posts });
   }
 
+  handleRemovePost = (post) => {
+    PostsModel.remove(post);
+    const posts = PostsModel.get();
+    this.setState({ posts });
+  }
+
   render() {
     const { posts } = this.state;
     return (
       <>
         <PostForm handleAddPost={this.handleAddPost} />
-        <Feed posts={posts} />
+        <Feed posts={posts} handleRemovePost={this.handleRemovePost}/>
       </>
     );
   }
