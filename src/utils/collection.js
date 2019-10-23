@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { addID, addCreateAt } from './creators'; 
 /**
  * class Collection
  * @param {string} name - name of collection
@@ -10,7 +12,7 @@ class Collection {
   items = []
 
   constructor(name) {
-    // TODO: implement
+    this.name = name;
     this._loadFromStorage();
   }
 
@@ -23,6 +25,10 @@ class Collection {
    */
   insert(doc) {
     // TODO: implement
+    addID( doc );
+    addCreateAt(doc);
+    this.items = [doc, ...this.items];
+    this._saveToStorage();
   }
 
   /**
@@ -32,7 +38,24 @@ class Collection {
    * @return {number} - number of removed documents
    */
   remove(selector) {
-    // TODO: implement
+    const countItems;
+    if(_.isEmpty(selector) || _.isUndefined(selector))
+    {
+      countItems = this.items.length;
+      this.items = [];
+      this._saveToStorage();
+      this._saveToStorage();
+      return countItems;
+    }
+    
+    countItems = this.items.length - _.remove(this.items, (item) => {
+      if(selector.id)
+        return item.id < selector.id;
+    }).length;
+
+    this._saveToStorage();
+
+    return countItems;
   }
 
   /**
@@ -43,14 +66,26 @@ class Collection {
    */
   find(selector) {
     // TODO: implement
+    if(_.isEmpty(selector) || _.isUndefined(selector))
+      return this.items;
+    return this.items.filter((item)=>{
+      if(item.body)
+        return item.body.toLowerCase().includies(selector.body);
+    });
+    
   }
 
   _loadFromStorage() {
     // TODO: implement
+    let load = localStorage.getItem(`__collection_${this.name}__`);
+    let items = load? JSON.parse(load):[];
+    if(items)
+      this.items = items;
   }
 
   _saveToStorage() {
     // TODO: implement
+    localStorage.setItem(`__collection_${this.name}__`, JSON.stringify(this.items));
   }
 }
 

@@ -1,17 +1,19 @@
 import React from 'react';
-
+//import { ButtonRemove } from './ButtonRemove';
 // eslint-disable-next-line no-unused-vars
-const Post = ({ body }) => (
+const Post = (post) => (
   <div>
-    <p>{body}</p>
+    <p>{post.body}</p>
+    <ButtonRemove />
   </div>
 );
 
 const Feed = ({ posts }) => (
   <div>
     { posts.map((post) => (
-      <Post key={post.id} body={post.body} />
-    ))}
+        <Post key={post.id} body={post.body} />
+      ))
+    }
   </div>
 );
 
