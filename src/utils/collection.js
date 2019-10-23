@@ -1,3 +1,5 @@
+import uuid from 'uuid/v4'
+import _ from 'lodash'
 /**
  * class Collection
  * @param {string} name - name of collection
@@ -6,11 +8,10 @@
  */
 class Collection {
   name = null
-
   items = []
 
   constructor(name) {
-    // TODO: implement
+    this.name = name;
     this._loadFromStorage();
   }
 
@@ -22,7 +23,12 @@ class Collection {
    * @return {object} - returns document from collection with newly generated id
    */
   insert(doc) {
-    // TODO: implement
+    if (!doc.id)
+      doc.id = uuid()
+    doc.createdAt = new Date().getTime();
+    this.items.push(doc)
+    this._saveToStorage();
+    return doc;
   }
 
   /**
@@ -32,7 +38,12 @@ class Collection {
    * @return {number} - number of removed documents
    */
   remove(selector) {
-    // TODO: implement
+    const prevSize = this.items.size;
+    this.items = _.difference(this.items, _.filter(this.items, selector));
+    if (_.isEmpty(selector))
+      this.items = [];
+    this._saveToStorage();
+    return prevSize - this.items.size;
   }
 
   /**
@@ -42,15 +53,15 @@ class Collection {
    * @return {object} - returns document from collection with newly generated id
    */
   find(selector) {
-    // TODO: implement
+    return _.filter(this.items, selector) || this.items;
   }
 
   _loadFromStorage() {
-    // TODO: implement
+    this.items = JSON.parse(localStorage.getItem(`__collection_${this.name}__`)) || [];
   }
 
   _saveToStorage() {
-    // TODO: implement
+    localStorage.setItem(`__collection_${this.name}__`, JSON.stringify(this.items));
   }
 }
 
