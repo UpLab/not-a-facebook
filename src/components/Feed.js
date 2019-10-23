@@ -1,7 +1,6 @@
 import React from 'react';
 import {
-  Card, CardBody,
-  CardTitle, Button,
+  Card, CardBody, Button,
 } from 'reactstrap';
 
 // eslint-disable-next-line no-unused-vars
@@ -9,7 +8,6 @@ const Post = ({ body, handleRemovePost }) => (
   <div className="post-form">
     <Card className="post-card" outline color="secondary">
       <CardBody>
-        <CardTitle>Title: </CardTitle>
         <p className="text-muted">{body}</p>
         <Button color="danger" onClick={handleRemovePost}>remove</Button>
         {' '}

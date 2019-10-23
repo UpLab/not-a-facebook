@@ -50,7 +50,34 @@ class Collection {
    * @return {object}
    */
   find(selector) {
-    return _.filter(this.items, selector) || this.items;
+    return _.filter(this.items, selector);
+  }
+
+  /**
+   * finds one document that match selector.
+   * if there is no selector, or selector is an empty object, then we return first doc
+   * if there is no documents found, then we return undefined
+   * @param {object} selector
+   * @return {object or undefined}
+   */
+  findOne(selector) {
+    return _.find(this.items, selector);
+  }
+
+  /**
+   * updates one document that matches selector.
+   * @param {object} selector
+   * @param {object} modifier - object with subfields to be merged
+   * @param {boolean} deep - if true, then the nested objects are merged recursively
+   * @return {object or undefined}
+   */
+  updateOne(selector, modifier, deep) {
+    if (_.isEmpty(selector)) return undefined;
+    const doc = this.findOne(selector);
+    if (deep) _.merge(doc, modifier);
+    else _.assign(doc, modifier);
+
+    return doc;
   }
 
   _loadFromStorage() {
