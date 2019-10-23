@@ -38,7 +38,7 @@ class Collection {
    * @return {number} - number of removed documents
    */
   remove(selector) {
-    const countItems;
+    let countItems;
     if(_.isEmpty(selector) || _.isUndefined(selector))
     {
       countItems = this.items.length;
@@ -47,7 +47,7 @@ class Collection {
       this._saveToStorage();
       return countItems;
     }
-    
+
     countItems = this.items.length - _.remove(this.items, (item) => {
       if(selector.id)
         return item.id < selector.id;

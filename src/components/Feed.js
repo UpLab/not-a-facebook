@@ -4,7 +4,7 @@ import React from 'react';
 const Post = (post) => (
   <div>
     <p>{post.body}</p>
-    <ButtonRemove />
+
   </div>
 );
 
