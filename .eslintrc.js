@@ -18,5 +18,6 @@ module.exports = {
     'react/prop-types': 'off',
     'react/state-in-constructor': 'off',
     'no-underscore-dangle': 'off',
+    "linebreak-style": 0,
   }
 };

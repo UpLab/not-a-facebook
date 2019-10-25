@@ -1,6 +1,8 @@
 import uuid from 'uuid';
+import CryptoJS from 'crypto-js';
 import Collection from '../utils/collection';
 
+const ENCRYPT_KEY = 'Key-CryptoJS.HmacSHA1';
 // const user = {
 //   id: String
 //   username: String
@@ -18,8 +20,8 @@ import Collection from '../utils/collection';
 //   lastLoginDate: Date
 // };
 
-// TODO: implement encryption
-export const encrypt = (password) => password.split('').reverse().join('');
+
+export const encrypt = (password) => CryptoJS.HmacSHA1(password, ENCRYPT_KEY).toString();
 
 export const initUserDocument = (username, password, profile) => ({
   username,
