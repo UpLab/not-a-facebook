@@ -61,7 +61,8 @@ class Users {
     if (!user) {
       throw new Error('Username or password is not valid. Please try again!');
     }
-    // TODO: update last login date in the user's object
+
+    this.collection.updateOne({ id: user.id }, { lastLoginDate: new Date() });
     const accessToken = addAccessTokenToUser(user);
     return accessToken;
   }
