@@ -138,6 +138,14 @@ describe('UsersServer', () => {
       const user = UsersServer.collection.findOne({ username });
       expect(user.accessTokens.find((a) => a.token === accessToken.token)).toBeDefined();
     });
+    test('update last login date in the user’s object', () => {
+      const user = UsersServer.collection.findOne({ username });
+      const prevDate = user.lastLoginDate;
+      UsersServer.login(username, password);
+      const currDate = user.lastLoginDate;
+      expect(prevDate - currDate).toBeLessThan(0);
+      expect(currDate - prevDate).toBeGreaterThan(0);
+    });
   });
 
   describe('findUserByToken()', () => {
