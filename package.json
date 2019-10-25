@@ -41,6 +41,7 @@
     "husky": "3.0.9",
     "jest": "24.9.0",
     "jest-cli": "^24.9.0",
+    "jest-tobetype": "^1.2.3",
     "lint-staged": "9.4.2",
     "node-sass": "4.12.0",
     "sass-loader": "8.0.0",
@@ -75,5 +76,8 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "jest": {
+    "setupFilesAfterEnv": ["./src/setup-test.js"]
   }
 }

@@ -9,7 +9,6 @@ class Users {
 
   constructor() {
     this.resume();
-    console.log(this);
   }
 
   setToken = (accessToken) => {

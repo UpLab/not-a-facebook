@@ -1,5 +1,5 @@
 import PostsModel from '../posts';
 
-test('posts', () => {
+test('PostsModel', () => {
   expect(PostsModel).toBeDefined();
 });

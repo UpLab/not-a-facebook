@@ -19,9 +19,9 @@ import Collection from '../utils/collection';
 // };
 
 // TODO: implement encryption
-const encrypt = (password) => password;
+export const encrypt = (password) => password.split('').reverse().join('');
 
-const initUserDocument = (username, password, profile) => ({
+export const initUserDocument = (username, password, profile) => ({
   username,
   password: encrypt(password),
   profile,
@@ -31,11 +31,13 @@ const initUserDocument = (username, password, profile) => ({
 });
 
 const THIRTY_MINUTES = 30 * 60 * 1000;
-const generateAccessToken = () => ({
+export const TOKEN_EXPIRATION_PERIOD = THIRTY_MINUTES;
+
+export const generateAccessToken = () => ({
   token: uuid(),
   expiresAt: new Date(new Date().getTime() + THIRTY_MINUTES),
 });
-const addAccessTokenToUser = (user) => {
+export const addAccessTokenToUser = (user) => {
   const accessToken = generateAccessToken();
   user.accessTokens.push(accessToken);
   return accessToken;
