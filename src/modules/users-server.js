@@ -54,7 +54,8 @@ class Users {
   }
 
   login = (username, password) => {
-    const user = this.collection.findOne({ username, password });
+    const encrypted = encrypt(password);
+    const user = this.collection.findOne({ username, password: encrypted });
     if (!user) {
       throw new Error('Username or password is not valid. Please try again!');
     }
