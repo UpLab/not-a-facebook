@@ -1,8 +1,8 @@
 import UsersServer from './users-server';
 
-const ACCESS_TOKEN_STORAGE_KEY = '__access_token__';
+export const ACCESS_TOKEN_STORAGE_KEY = '__access_token__';
 
-class Users {
+export class Users {
   currentUser = null
 
   token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY)
@@ -12,8 +12,12 @@ class Users {
   }
 
   setToken = (accessToken) => {
-    this.token = accessToken.token;
-    localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, accessToken.token);
+    let token = accessToken;
+    if (typeof accessToken === 'object') {
+      token = accessToken.token;
+    }
+    this.token = token;
+    localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token);
   }
 
   createAccount = (username, password, profile) => {
@@ -40,7 +44,7 @@ class Users {
       UsersServer.logout(this.token);
     }
 
-    this.setToken('');
+    this.setToken({ token: '' });
   }
 
   me = () => UsersServer.findUserByToken(this.token)

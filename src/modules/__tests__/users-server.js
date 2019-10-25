@@ -5,18 +5,8 @@ import UsersServer, {
   generateAccessToken,
   addAccessTokenToUser,
 } from '../users-server';
+import { userFactory } from './utils';
 
-const profileFactory = () => ({
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  avatar: faker.internet.avatar(),
-});
-
-const userFactory = () => ({
-  username: faker.internet.userName(),
-  password: faker.internet.password(),
-  profile: profileFactory(),
-});
 
 describe('UsersServer helpers', () => {
   const testAccessToken = (accessToken) => {
