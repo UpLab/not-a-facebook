@@ -12,6 +12,12 @@ const profileFactory = () => ({
   avatar: faker.internet.avatar(),
 });
 
+const userFactory = () => ({
+  username: faker.internet.userName(),
+  password: faker.internet.password(),
+  profile: profileFactory(),
+});
+
 describe('UsersServer helpers', () => {
   const testAccessToken = (accessToken) => {
     expect(accessToken).toHaveProperty('token');
@@ -25,15 +31,13 @@ describe('UsersServer helpers', () => {
     expect(UsersServer).toBeDefined();
   });
   test('encrypt()', () => {
-    const input = 'some$123(432$%';
+    const input = faker.internet.password();
     const result = encrypt(input);
     expect(result).toBeType('string');
     expect(result).not.toEqual(input);
   });
   test('initUserDocument()', () => {
-    const username = 'test';
-    const password = 'pass';
-    const profile = profileFactory();
+    const { username, password, profile } = userFactory();
     const user = initUserDocument(username, password, profile);
     expect(user).toBeType('object');
     const props = ['username', 'password', 'profile', 'createdAt', 'lastLoginDate', 'accessTokens'];
@@ -67,11 +71,21 @@ describe('UsersServer helpers', () => {
 describe('UsersServer', () => {
   describe('createAccount()', () => {
     describe('create account', () => {
-      UsersServer.collection.remove({});
-      const username = 'test';
-      const password = 'pass';
-      const profile = profileFactory();
-      const accessToken = UsersServer.createAccount(username, password, profile);
+      let accessToken;
+      let username;
+      let password;
+      let profile;
+      let user;
+      beforeAll(() => {
+        UsersServer.collection.remove();
+        const userParams = userFactory();
+        username = userParams.username;
+        password = userParams.password;
+        profile = userParams.profile;
+        accessToken = UsersServer.createAccount(username, password, profile);
+        user = UsersServer.findUserByToken(accessToken.token);
+      });
+
       test('it issues a valid access token', () => {
         expect(accessToken).toHaveProperty('token');
         expect(accessToken).toHaveProperty('expiresAt');
@@ -79,7 +93,6 @@ describe('UsersServer', () => {
       test('it adds user to the collection', () => {
         expect(UsersServer.collection.items.length).toBe(1);
       });
-      const user = UsersServer.collection.findOne();
 
       test('it adds access token to the user', () => {
         expect(user.accessTokens.length).toBe(1);
@@ -93,12 +106,9 @@ describe('UsersServer', () => {
       });
     });
     describe('it should not be possible to register with duplicate username', () => {
-      UsersServer.collection.remove({});
-      const username = 'test';
-      const password = 'pass';
-      const password2 = 'pass1234';
-      const profile = profileFactory();
-      const profile2 = profileFactory();
+      UsersServer.collection.remove();
+      const { username, password, profile } = userFactory();
+      const { password: password2, profile: profile2 } = userFactory();
       UsersServer.createAccount(username, password, profile);
       test('throws error', () => {
         expect(() => UsersServer.createAccount(username, password2, profile2)).toThrow();
@@ -110,12 +120,18 @@ describe('UsersServer', () => {
     });
   });
   describe('login()', () => {
-    UsersServer.collection.remove({});
-    const username = 'test';
-    const password = 'pass';
-    const profile = profileFactory();
+    let username;
+    let password;
+    let profile;
+    beforeAll(() => {
+      UsersServer.collection.remove();
+      const userParams = userFactory();
+      username = userParams.username;
+      password = userParams.password;
+      profile = userParams.profile;
+      UsersServer.createAccount(username, password, profile);
+    });
 
-    UsersServer.createAccount(username, password, profile);
     test('it throws if password is wrong', () => {
       expect(() => UsersServer.login(username, '1234')).toThrow();
     });
@@ -129,8 +145,61 @@ describe('UsersServer', () => {
     });
     test('it adds an access token to the user', () => {
       const accessToken = UsersServer.login(username, password);
-      const user = UsersServer.collection.findOne({ username: 'test' });
+      const user = UsersServer.collection.findOne({ username });
       expect(user.accessTokens.find((a) => a.token === accessToken.token)).toBeDefined();
+    });
+  });
+
+  describe('findUserByToken()', () => {
+    beforeAll(() => {
+      UsersServer.collection.remove();
+      [...new Array(5)].forEach(() => {
+        const { username, password, profile } = userFactory();
+        UsersServer.createAccount(username, password, profile);
+        [...new Array(15)].forEach(() => {
+          UsersServer.login(username, password);
+        });
+      });
+    });
+
+    test('it returns right user by token', () => {
+      UsersServer.collection.find({}).forEach((user) => {
+        const { accessTokens } = user;
+        accessTokens.forEach(({ token }) => {
+          const u = UsersServer.findUserByToken(token);
+          expect(u.id).toEqual(user.id);
+        });
+      });
+    });
+  });
+
+  describe('logout()', () => {
+    let user;
+    let username;
+    let password;
+    let profile;
+    beforeAll(() => {
+      UsersServer.collection.remove();
+      const userParams = userFactory();
+      username = userParams.username;
+      password = userParams.password;
+      profile = userParams.profile;
+      UsersServer.createAccount(username, password, profile);
+      [...new Array(15)].forEach(() => {
+        UsersServer.login(username, password);
+      });
+      user = UsersServer.collection.findOne({ username });
+    });
+    test('removes access token', () => {
+      const tokensCount = user.accessTokens.length;
+      user.accessTokens.forEach(({ token }, i) => {
+        UsersServer.logout(token);
+        const u = UsersServer.collection.findOne({ username });
+        // console.log(u.accessTokens.map(({token}) => token));
+        // console.log(token);
+        expect(u.accessTokens.length).toBe(tokensCount - i - 1);
+        expect(u.accessTokens.find((a) => a.token === token)).toBeUndefined();
+      });
     });
   });
 });

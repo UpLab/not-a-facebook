@@ -67,12 +67,23 @@ class Users {
   logout = (token) => {
     const user = this.findUserByToken(token);
     if (!user) return;
-    const filteredAccessTokens = user.accessTokens.filter((accessToken) => accessToken !== token);
+    const filteredAccessTokens = user.accessTokens.filter(
+      (accessToken) => accessToken.token !== token,
+    );
     this.collection.updateOne({ id: user.id }, { accessTokens: filteredAccessTokens });
   }
 
   // eslint-disable-next-line no-unused-vars
-  findUserByToken = (token) => this.collection.items[0]
+  findUserByToken = (token) => {
+    const users = this.collection.find();
+    return users.find(({ accessTokens }) => {
+      const accessToken = accessTokens.find((a) => {
+        if (a.token === token) return true;
+        return false;
+      });
+      return accessToken;
+    });
+  }
 
 
   // get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])
