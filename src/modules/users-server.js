@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import md5 from 'md5';
 import Collection from '../utils/collection';
 
 // const user = {
@@ -19,8 +20,10 @@ import Collection from '../utils/collection';
 // };
 
 // TODO: implement encryption
-export const encrypt = (password) => password.split('').reverse().join('');
-
+export const encrypt = (password) => {
+  const rPassword = password.split('').reverse().join('');
+  return md5(rPassword);
+};
 export const initUserDocument = (username, password, profile) => ({
   username,
   password: encrypt(password),
