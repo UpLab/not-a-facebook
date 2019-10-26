@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import {
   Card, CardBody, Button,
 } from 'reactstrap';
@@ -25,6 +26,17 @@ const Feed = ({ posts, handleRemovePost }) => (
         handleRemovePost={() => handleRemovePost({ id: post.id })}
       />
     ))}
+=======
+import Post  from './Post';
+// eslint-disable-next-line no-unused-vars
+
+const Feed = ({ posts, handleRemovePost }) => (
+  <div>
+    { posts.map((post) => (
+        <Post post={post} handleRemovePost={handleRemovePost.bind(this, {id: post.id})}/>
+      ))
+    }
+>>>>>>> 9384d0e6ce6d7b3f88b8ea97fa900087e6ded89d
   </div>
 );
 
