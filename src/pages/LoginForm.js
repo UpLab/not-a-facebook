@@ -28,14 +28,15 @@ class LoginForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { username, password, isLogin } = this.state;
-    if (isLogin) {
-      try {
+    try {
+      if (isLogin) {
         UsersModel.login(username, password);
-      } catch (err) {
-        this.setState({ errLogin: { active: true, msg: err } });
+      } else {
+        UsersModel.createAccount(username, password, mockProfile());
       }
-    } else {
-      UsersModel.createAccount(username, password, mockProfile());
+      this.setState({ errLogin: { active: false, msg: '' } });
+    } catch (err) {
+      this.setState({ errLogin: { active: true, msg: err } });
     }
   }
 
@@ -55,8 +56,23 @@ class LoginForm extends Component {
           <Alert color="danger" isOpen={errLogin.active}>
             {errLogin.msg.toString()}
           </Alert>
-          <Input type="text" name="username" placeholder="Username" value={username} onChange={this.handleChange} />
-          <Input type="password" name="password" placeholder="password" value={password} onChange={this.handleChange} />
+          <Input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={username}
+            pattern="^[a-z0-9_-]{3,15}$"
+            onChange={this.handleChange}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="password"
+            value={password}
+            title="Для прикладу: 1Aaaaaaa"
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+            onChange={this.handleChange}
+          />
           <Button
             className="login-form-submit"
             type="submit"

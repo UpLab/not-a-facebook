@@ -47,6 +47,10 @@ class Users {
   collection = new Collection('users')
 
   createAccount = (username, password, profile) => {
+    const isExist = !!this.collection.findOne({ username });
+    if (isExist) {
+      throw new Error('Username already taken!');
+    }
     const user = initUserDocument(username, password, profile);
     const accessToken = addAccessTokenToUser(user);
     this.collection.insert(user);
@@ -57,7 +61,7 @@ class Users {
     const encrypted = encrypt(password);
     const user = this.collection.findOne({ username, password: encrypted });
     if (!user) {
-      throw new Error('Username or password is not valid. Please try again!');
+      throw new Error('Invalid username or password!');
     }
     this.collection.updateOne({ id: user.id }, { lastLoginDate: new Date() });
     const accessToken = addAccessTokenToUser(user);
