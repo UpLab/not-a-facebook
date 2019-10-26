@@ -18,7 +18,9 @@ module.exports = {
     'react/prop-types': 'off',
     'react/state-in-constructor': 'off',
     'react/sort-comp': 'off',
-    'react/destructuring-assignment': 'off'
+    'react/destructuring-assignment': 'off',
+    'react/no-unused-state' : 'off',
+    'no-underscore-dangle' : 'off',
     'linebreak-style': 'off'
   }
 };
