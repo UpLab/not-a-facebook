@@ -76,7 +76,7 @@ class Collection {
     const doc = this.findOne(selector);
     if (deep) _.merge(doc, modifier);
     else _.assign(doc, modifier);
-
+    this._saveToStorage();
     return doc;
   }
 

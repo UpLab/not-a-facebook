@@ -1,6 +1,5 @@
 import uuid from 'uuid';
 import md5 from 'md5';
-import { upLoginDate } from '../utils/creators';
 import Collection from '../utils/collection';
 // const user = {
 //   id: String
@@ -61,7 +60,7 @@ class Users {
     if (!user) {
       throw new Error('Username or password is not valid. Please try again!');
     }
-    upLoginDate(user);
+    this.collection.updateOne({ id: user.id }, { lastLoginDate: new Date() });
     const accessToken = addAccessTokenToUser(user);
     return accessToken;
   }
