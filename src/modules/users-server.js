@@ -1,7 +1,7 @@
 import uuid from 'uuid';
 import md5 from 'md5';
+import { upLoginDate } from '../utils/creators';
 import Collection from '../utils/collection';
-
 // const user = {
 //   id: String
 //   username: String
@@ -19,7 +19,6 @@ import Collection from '../utils/collection';
 //   lastLoginDate: Date
 // };
 
-// TODO: implement encryption
 export const encrypt = (password) => {
   const rPassword = password.split('').reverse().join('');
   return md5(rPassword);
@@ -62,7 +61,7 @@ class Users {
     if (!user) {
       throw new Error('Username or password is not valid. Please try again!');
     }
-    // TODO: update last login date in the user's object
+    upLoginDate(user);
     const accessToken = addAccessTokenToUser(user);
     return accessToken;
   }
