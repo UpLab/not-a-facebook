@@ -13,6 +13,8 @@ class Posts {
       this.collection.insert({
         body, firstName, lastName, avatar, creatorId: id,
       });
+    } else {
+      throw new Error('you need to sign in or create an account that to add posts');
     }
   }
 

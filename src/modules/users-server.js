@@ -19,7 +19,6 @@ import Collection from '../utils/collection';
 //   lastLoginDate: Date
 // };
 
-// TODO: implement encryption
 export const encrypt = (password) => md5(password);
 
 export const initUserDocument = (username, password, profile) => ({

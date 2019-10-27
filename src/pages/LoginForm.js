@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Input, Button } from 'reactstrap';
 import faker from 'faker';
-
 import UsersModel from '../modules/users';
+import ModalForm from '../components/ModalForm';
 
 const mockProfile = () => ({
   firstName: faker.name.firstName(),
@@ -15,6 +15,7 @@ class LoginForm extends Component {
     username: '',
     password: '',
     isLogin: true,
+    error: { active: false, message: '' },
   }
 
   toggleForm = () => {
@@ -24,10 +25,14 @@ class LoginForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { username, password, isLogin } = this.state;
-    if (isLogin) {
-      UsersModel.login(username, password);
-    } else {
-      UsersModel.createAccount(username, password, mockProfile());
+    try {
+      if (isLogin) {
+        UsersModel.login(username, password);
+      } else {
+        UsersModel.createAccount(username, password, mockProfile());
+      }
+    } catch (error) {
+      this.setState({ error: { active: true, message: error } });
     }
   }
 
@@ -37,13 +42,18 @@ class LoginForm extends Component {
   }
 
   render() {
-    const { username, password, isLogin } = this.state;
+    const {
+      username, password, isLogin, error,
+    } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
         <Button type="button" onClick={this.toggleForm}>Toggle Form</Button>
         <Input type="text" name="username" value={username} onChange={this.handleChange} />
         <Input type="password" name="password" value={password} onChange={this.handleChange} />
-        <Button type="submit">{ isLogin ? 'Log In' : 'Create Account' }</Button>
+        <Button type="submit">{isLogin ? 'Log In' : 'Create Account'}</Button>
+        {
+          error.active && <ModalForm>{ error.message.toString() }</ModalForm>
+        }
       </Form>
     );
   }
