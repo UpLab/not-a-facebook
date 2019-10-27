@@ -56,7 +56,7 @@ class LoginForm extends Component {
       <Form onSubmit={this.handleSubmit}>
         <Button type="button" onClick={this.toggleForm}>Toggle Form</Button>
         <Input type="text" name="username" value={username} onChange={this.handleChange} />
-        <Input type="password" name="password" value={password} onChange={this.handleChange} />
+        <Input type="password" name="password" value={password} pattern="^(?=\w).{8,}$" onChange={this.handleChange} />
         <Button type="submit">{ isLogin ? 'Log In' : 'Create Account' }</Button>
         <Alert color="danger" isOpen={errLogin.active} toggle={this.onDismiss}>
           {errLogin.message.toString()}
