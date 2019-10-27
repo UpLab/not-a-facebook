@@ -7,6 +7,7 @@ class PostContainer extends Component {
     id: '',
     createAt: '',
     body: '',
+    // profile: null,
   }
 
   constructor(props) {
@@ -14,9 +15,17 @@ class PostContainer extends Component {
     this.id = props.post.id;
     this.createAt = props.post.createAt;
     this.body = props.post.body;
+    //   this.profile = props.post.profile;
   }
 
   render() {
+    /*
+    <Post
+        profile={this.profile}
+        handleClick={this.props.handleRemovePost}
+        body={this.body}
+      />
+    */
     return (
       <Post
         handleClick={this.props.handleRemovePost}

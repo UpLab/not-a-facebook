@@ -29,6 +29,17 @@ class Collection {
     return doc;
   }
 
+  insertUser(_doc, _obj) {
+    const doc = { ..._doc };
+    const obj = { ..._obj };
+    if (!('id' in doc)) { doc.id = _.uniqueId(`${this.name}_`); }
+    doc.createdAt = new Date().getTime();
+    const post = _.merge(doc, obj);
+    this.items.push(post);
+    this._saveToStorage();
+    return doc;
+  }
+
   /**
    * removes all documents that match selector.
    * if there is no selector, or selector is an empty object, then we clear the collection

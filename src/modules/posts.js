@@ -6,7 +6,9 @@ class Posts {
 
   get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])
 
-  add = ({ body }) => this.collection.insert({ body })
+  add = (post) => this.collection.insert(post)
+
+  addUser = (post, user) => this.collection.insertUser(post, user)
 
   remove = (post) => this.collection.remove(post);
 }
