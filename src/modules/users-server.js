@@ -53,8 +53,7 @@ class Users {
     const user = initUserDocument(username, password, profile);
     if (this.collection.findOne({ username })) {
       throw new Error('Duplicate Username. The username already exists! Please use another username.');
-    }
-
+    } else if (username.length < 4 || password.length < 4) throw new Error('Username or password too short. Min lenght is 4');
     const accessToken = addAccessTokenToUser(user);
     this.collection.insert(user);
     return accessToken;

@@ -21,7 +21,7 @@ export class Users {
   }
 
   createAccount = (username, password, profile) => {
-    const accessToken = UsersServer.createAccount(username, password, profile);
+    const accessToken = UsersServer.createAccount(username.trim(), password.trim(), profile);
     this.setToken(accessToken);
     this.currentUser = this.me(this.token);
   }
