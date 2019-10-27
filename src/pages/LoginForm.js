@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'reactstrap';
+import {
+  Form, Input, Button, Alert,
+} from 'reactstrap';
 import faker from 'faker';
-
 import UsersModel from '../modules/users';
 
 const mockProfile = () => ({
@@ -15,19 +16,26 @@ class LoginForm extends Component {
     username: '',
     password: '',
     isLogin: true,
+    errLogin: { active: false, message: '' },
   }
 
   toggleForm = () => {
     this.setState(({ isLogin }) => ({ isLogin: !isLogin }));
+    this.setState({ errLogin: { active: false, message: '' } });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { username, password, isLogin } = this.state;
-    if (isLogin) {
-      UsersModel.login(username, password);
-    } else {
-      UsersModel.createAccount(username, password, mockProfile());
+    try {
+      if (isLogin) {
+        UsersModel.login(username, password);
+      } else {
+        UsersModel.createAccount(username, password, mockProfile());
+      }
+      this.setState({ errLogin: { active: false, message: '' } });
+    } catch (error) {
+      this.setState({ errLogin: { active: true, message: error } });
     }
   }
 
@@ -36,14 +44,23 @@ class LoginForm extends Component {
     this.setState({ [name]: value });
   }
 
+  onDismiss = () => {
+    this.setState({ errLogin: { active: false, message: '' } });
+  }
+
   render() {
-    const { username, password, isLogin } = this.state;
+    const {
+      username, password, isLogin, errLogin,
+    } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
         <Button type="button" onClick={this.toggleForm}>Toggle Form</Button>
         <Input type="text" name="username" value={username} onChange={this.handleChange} />
         <Input type="password" name="password" value={password} onChange={this.handleChange} />
         <Button type="submit">{ isLogin ? 'Log In' : 'Create Account' }</Button>
+        <Alert color="danger" isOpen={errLogin.active} toggle={this.onDismiss}>
+          {errLogin.message.toString()}
+        </Alert>
       </Form>
     );
   }

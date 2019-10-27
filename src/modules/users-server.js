@@ -48,6 +48,10 @@ class Users {
   collection = new Collection('users')
 
   createAccount = (username, password, profile) => {
+    const isUsername = !!this.collection.findOne({ username });
+    if (isUsername) {
+      throw new Error('Username is invalid');
+    }
     const user = initUserDocument(username, password, profile);
     const accessToken = addAccessTokenToUser(user);
     this.collection.insert(user);
