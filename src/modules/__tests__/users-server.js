@@ -99,11 +99,15 @@ describe('UsersServer', () => {
       UsersServer.collection.remove();
       const { username, password, profile } = userFactory();
       const { password: password2, profile: profile2 } = userFactory();
-      UsersServer.createAccount(username, password, profile);
       test('throws error', () => {
+        UsersServer.createAccount(username, password, profile);
         expect(() => UsersServer.createAccount(username, password2, profile2)).toThrow();
       });
       test("it doesn't insert a new user to the collection", () => {
+        UsersServer.collection.remove();
+        UsersServer.createAccount(username, password, profile);
+
+        expect(() => UsersServer.createAccount(username, password2, profile2)).toThrow();
         expect(UsersServer.collection.items.length).toBe(1);
         expect(UsersServer.collection.findOne().profile).toEqual(profile);
       });
@@ -193,8 +197,6 @@ describe('UsersServer', () => {
       user.accessTokens.forEach(({ token }, i) => {
         UsersServer.logout(token);
         const u = UsersServer.collection.findOne({ username });
-        // console.log(u.accessTokens.map(({token}) => token));
-        // console.log(token);
         expect(u.accessTokens.length).toBe(tokensCount - i - 1);
         expect(u.accessTokens.find((a) => a.token === token)).toBeUndefined();
       });

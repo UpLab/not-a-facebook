@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PostForm from './PostForm';
 import { createPost } from '../../utils/creators';
+import UsersModel from '../../modules/users';
 
 class PostFormContainer extends Component {
   state = {
     textAreaVisible: true,
     body: '',
+    isLoggedIn: UsersModel.isLoggedIn(),
   }
 
   toggleTextArea = () => {
@@ -28,9 +30,11 @@ class PostFormContainer extends Component {
   }
 
   render() {
-    const { textAreaVisible, body } = this.state;
+    const { textAreaVisible, body, isLoggedIn } = this.state;
+
     return (
       <PostForm
+        isLoggedIn={isLoggedIn}
         toggleTextArea={this.toggleTextArea}
         handleSubmit={this.handleSubmit}
         handleChange={this.handleChange}

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import uuid from 'uuid/v4';
 /**
  * class Collection
  * @param {string} name - name of collection
@@ -22,7 +23,7 @@ class Collection {
    */
   insert(_doc) {
     const doc = { ..._doc };
-    if (!('id' in doc)) { doc.id = _.uniqueId(`${this.name}_`); }
+    if (!('id' in doc)) { doc.id = uuid(); }
     doc.createdAt = new Date().getTime();
     this.items.push(doc);
     this._saveToStorage();
@@ -76,7 +77,7 @@ class Collection {
     const doc = this.findOne(selector);
     if (deep) _.merge(doc, modifier);
     else _.assign(doc, modifier);
-
+    this._saveToStorage();
     return doc;
   }
 

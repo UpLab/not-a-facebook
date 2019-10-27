@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import CryptoJS from 'crypto-js';
+import _ from 'lodash';
 import Collection from '../utils/collection';
 
 const ENCRYPT_KEY = 'Key-CryptoJS.HmacSHA1';
@@ -50,6 +51,10 @@ class Users {
 
   createAccount = (username, password, profile) => {
     const user = initUserDocument(username, password, profile);
+    if (this.collection.findOne({ username })) {
+      throw new Error('Duplicate Username. The username already exists! Please use another username.');
+    }
+
     const accessToken = addAccessTokenToUser(user);
     this.collection.insert(user);
     return accessToken;
@@ -62,8 +67,11 @@ class Users {
       throw new Error('Username or password is not valid. Please try again!');
     }
 
-    this.collection.updateOne({ id: user.id }, { lastLoginDate: new Date() });
+
     const accessToken = addAccessTokenToUser(user);
+
+    this.collection.updateOne({ id: user.id },
+      { lastLoginDate: new Date(), accessTokens: user.accessTokens });
     return accessToken;
   }
 
@@ -79,6 +87,7 @@ class Users {
   // eslint-disable-next-line no-unused-vars
   findUserByToken = (token) => {
     const users = this.collection.find();
+
     return users.find(({ accessTokens }) => {
       const accessToken = accessTokens.find((a) => {
         if (a.token === token) return true;
@@ -87,6 +96,8 @@ class Users {
       return accessToken;
     });
   }
+
+  findUserById = (id) => _.find(this.collection.find(), { id })
 
 
   // get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])

@@ -9,10 +9,10 @@ const PostForm = ({
 }) => (
   <Form onSubmit={handleSubmit}>
     {textAreaVisible && (
-      <FormGroup>
-        <Label>New post</Label>
-        <Input type="textarea" name="body" onChange={handleChange} value={body} />
-      </FormGroup>
+    <FormGroup>
+      <Label>New post</Label>
+      <Input type="textarea" name="body" onChange={handleChange} value={body} />
+    </FormGroup>
     )}
     <div className="text-right">
       <Button type="button" onClick={toggleTextArea} style={{ margin: '15px' }}>Toggle Text Area</Button>
