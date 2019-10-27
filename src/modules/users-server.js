@@ -48,6 +48,9 @@ class Users {
   collection = new Collection('users')
 
   createAccount = (username, password, profile) => {
+    if (this.collection.findOne({ username })) {
+      throw new Error('username is already used');
+    }
     const user = initUserDocument(username, password, profile);
     const accessToken = addAccessTokenToUser(user);
     this.collection.insert(user);
