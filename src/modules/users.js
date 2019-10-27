@@ -50,6 +50,8 @@ export class Users {
   me = () => UsersServer.findUserByToken(this.token)
 
   isLoggedIn = () => !!this.token
+
+  addPost = (post) => UsersServer.addPost(this.token, post);
 }
 
 export default new Users();

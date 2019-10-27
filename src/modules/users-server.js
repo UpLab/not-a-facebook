@@ -29,6 +29,7 @@ export const initUserDocument = (username, password, profile) => ({
   createdAt: new Date(),
   lastLoginDate: new Date(),
   accessTokens: [],
+  posts: [],
 });
 
 const THIRTY_MINUTES = 30 * 60 * 1000;
@@ -89,6 +90,11 @@ class Users {
     });
   }
 
+  addPost = (token, post) => {
+    const user = this.findUserByToken(token);
+    user.posts.unshift(post);
+    this.collection.updateOne({ id: user.id });
+  }
 
   // get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])
 

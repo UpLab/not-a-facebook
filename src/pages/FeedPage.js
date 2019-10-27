@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 import PostsModel from '../modules/posts';
+import UsersModel from '../modules/users';
 // import posts from '../__mocks__/posts';
 
 class FeedPage extends Component {
@@ -11,6 +12,7 @@ class FeedPage extends Component {
 
   handleAddPost = (post) => {
     PostsModel.add(post);
+    UsersModel.addPost(post);
     const posts = PostsModel.get();
     this.setState({ posts });
   }
