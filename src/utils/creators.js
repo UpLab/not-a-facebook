@@ -1,7 +1,8 @@
-import faker from 'faker';
+import uuid from 'uuid/v4';
 
 // eslint-disable-next-line import/prefer-default-export
-export const createPost = (value) => ({
-  id: faker.random.uuid(),
+export const createPost = (value, userId) => ({
+  id: uuid(),
   body: value,
+  userId,
 });

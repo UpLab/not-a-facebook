@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 import PostsModel from '../modules/posts';
+
 // import posts from '../__mocks__/posts';
+export const { Provider, Consumer } = React.createContext();
 
 class FeedPage extends Component {
   state = {
@@ -23,6 +25,8 @@ class FeedPage extends Component {
 
   render() {
     const { posts } = this.state;
+
+
     return (
       <>
         <PostForm handleAddPost={this.handleAddPost} />

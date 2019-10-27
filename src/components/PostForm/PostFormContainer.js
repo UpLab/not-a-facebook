@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Alert } from 'reactstrap';
 import PostForm from './PostForm';
 import { createPost } from '../../utils/creators';
 import UsersModel from '../../modules/users';
@@ -10,6 +11,8 @@ class PostFormContainer extends Component {
     textAreaVisible: true,
     body: '',
     isLoggedIn: UsersModel.isLoggedIn(),
+    error: false,
+    errorMessage: '',
   }
 
   toggleTextArea = () => {
@@ -19,10 +22,23 @@ class PostFormContainer extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const bodyPost = e.target.body.value;
+    const user = UsersModel.currentUser;
     const { handleAddPost } = this.props;
-    const post = createPost(e.target.body.value);
-    handleAddPost(post);
-    this.setState({ body: '' });
+    const post = createPost(bodyPost, user.id);
+
+    if (UsersModel.isLoggedIn() && user) {
+      handleAddPost(post);
+      this.setState({
+        isLoggedIn: UsersModel.isLoggedIn(), body: '', error: false, errorMessage: '',
+      });
+    } else {
+      this.setState({
+        isLoggedIn: UsersModel.isLoggedIn(),
+        error: true,
+        errorMessage: 'You must log in for create post!.Please log in or sign up',
+      });
+    }
   }
 
   handleChange = (e) => {
@@ -30,17 +46,24 @@ class PostFormContainer extends Component {
   }
 
   render() {
-    const { textAreaVisible, body, isLoggedIn } = this.state;
-
+    const {
+      textAreaVisible, body, isLoggedIn, errorMessage, error,
+    } = this.state;
+    console.log(errorMessage);
     return (
-      <PostForm
-        isLoggedIn={isLoggedIn}
-        toggleTextArea={this.toggleTextArea}
-        handleSubmit={this.handleSubmit}
-        handleChange={this.handleChange}
-        textAreaVisible={textAreaVisible}
-        body={body}
-      />
+      <>
+        <Alert color="danger" isOpen={error}>
+          {errorMessage}
+        </Alert>
+        <PostForm
+          isLoggedIn={isLoggedIn}
+          toggleTextArea={this.toggleTextArea}
+          handleSubmit={this.handleSubmit}
+          handleChange={this.handleChange}
+          textAreaVisible={textAreaVisible}
+          body={body}
+        />
+      </>
     );
   }
 }
