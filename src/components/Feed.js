@@ -4,10 +4,12 @@ import {
 } from 'reactstrap';
 import _ from 'lodash';
 import UsersModel from '../modules/users';
-// eslint-disable-next-line no-unused-vars
-const Post = ({ body, handleRemovePost, userId }) => {
+
+const Post = (props) => {
+  const {
+    body, handleRemovePost, userId, currentUser,
+  } = props;
   const user = UsersModel.getUser(userId);
-  const me = UsersModel.me();
   return (
     <div className="post-form">
       <Card className="post-card" outline color="secondary">
@@ -24,10 +26,10 @@ const Post = ({ body, handleRemovePost, userId }) => {
             </CardHeader>
           </Card>
         )}
-
         <CardBody style={{ height: '200px' }}>
           <p>{body}</p>
-          {_.isEmpty(me) || _.isEmpty(user) || user.id !== me.id ? null : <Button color="danger" onClick={handleRemovePost}>remove</Button>}
+          {_.isEmpty(currentUser) || _.isEmpty(user) || user.id !== currentUser.id ? null
+            : <Button color="danger" onClick={handleRemovePost}>remove</Button>}
           {' '}
         </CardBody>
       </Card>
@@ -36,12 +38,13 @@ const Post = ({ body, handleRemovePost, userId }) => {
 };
 
 
-const Feed = ({ posts, handleRemovePost }) => (
+const Feed = ({ posts, handleRemovePost, currentUser }) => (
   <div>
     {posts.map((post) => (
       <Post
         key={post.id}
         body={post.body}
+        currentUser={currentUser}
         userId={post.userId}
         handleRemovePost={() => handleRemovePost({ id: post.id })}
       />

@@ -3,9 +3,6 @@ import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 import PostsModel from '../modules/posts';
 
-// import posts from '../__mocks__/posts';
-export const { Provider, Consumer } = React.createContext();
-
 class FeedPage extends Component {
   state = {
     posts: PostsModel.get(),
@@ -25,12 +22,12 @@ class FeedPage extends Component {
 
   render() {
     const { posts } = this.state;
-
-
+    const { currentUser } = this.props;
     return (
       <>
         <PostForm handleAddPost={this.handleAddPost} />
-        <Feed posts={posts} handleRemovePost={this.handleRemovePost} />
+        <Feed currentUser={currentUser} posts={posts} handleRemovePost={this.handleRemovePost} />
+
       </>
     );
   }

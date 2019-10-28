@@ -25,9 +25,9 @@ class PostFormContainer extends Component {
     const bodyPost = e.target.body.value;
     const user = UsersModel.currentUser;
     const { handleAddPost } = this.props;
-    const post = createPost(bodyPost, user.id);
 
     if (UsersModel.isLoggedIn() && user) {
+      const post = createPost(bodyPost, user.id);
       handleAddPost(post);
       this.setState({
         isLoggedIn: UsersModel.isLoggedIn(), body: '', error: false, errorMessage: '',

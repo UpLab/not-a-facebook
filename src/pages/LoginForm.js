@@ -29,6 +29,7 @@ class LoginForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { username, password, isLogin } = this.state;
+    const { setCurrentUser } = this.props;
     try {
       if (isLogin) {
         UsersModel.login(username, password);
@@ -38,6 +39,7 @@ class LoginForm extends Component {
       this.setState({
         error: false, errorMessage: '',
       });
+      setCurrentUser(UsersModel.currentUser);
     } catch (error) {
       this.setState({
         error: true, errorMessage: error.message.toString(),
@@ -52,8 +54,10 @@ class LoginForm extends Component {
   }
 
   handleLogOut = () => {
+    const { setCurrentUser } = this.props;
     UsersModel.logout();
     this.setState({ isLoggedIn: UsersModel.isLoggedIn() });
+    setCurrentUser(UsersModel.currentUser);
   }
 
   render() {

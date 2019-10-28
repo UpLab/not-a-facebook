@@ -45,7 +45,7 @@ export class Users {
     if (!skipServer) {
       UsersServer.logout(this.token);
     }
-
+    this.currentUser = this.me(this.token);
     this.setToken({ token: '' });
   }
 
