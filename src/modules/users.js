@@ -47,6 +47,20 @@ export class Users {
     this.setToken({ token: '' });
   }
 
+  // default user
+  deftUser = () => ({
+    username: '',
+    password: '',
+    profile: {
+      firstName: '',
+      lastName: '',
+      avatar: 'http://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png',
+    },
+    lastLoginDate: '',
+    accessTokens: [],
+    id: '',
+  });
+
   me = () => UsersServer.findUserByToken(this.token)
 
   isLoggedIn = () => !!this.token

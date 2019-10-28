@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 import PostsModel from '../modules/posts';
+import UsersModel from '../modules/users';
 // import posts from '../__mocks__/posts';
 
 class FeedPage extends Component {
   state = {
     posts: PostsModel.get(),
+    curUser: UsersModel.me(),
   }
 
   handleAddPost = (post) => {
@@ -16,9 +19,12 @@ class FeedPage extends Component {
   }
 
   handleRemovePost = (post) => {
-    PostsModel.remove(post);
-    const posts = PostsModel.get();
-    this.setState({ posts });
+    const { curUser } = this.state;
+    if (_.isEqual(curUser.profile, post.creatorsProfile)) {
+      PostsModel.remove(post);
+      const posts = PostsModel.get();
+      this.setState({ posts });
+    }
   }
 
   render() {

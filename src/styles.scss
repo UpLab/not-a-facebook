@@ -7,6 +7,25 @@ html, body {
   max-width: 550px;
 }
 
+.login-form {
+  margin: 15px;
+}
+
 .post-form {
   margin: 10px;
+}
+
+.login-form {
+  text-align: center; 
+}
+
+input {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+button {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
 }

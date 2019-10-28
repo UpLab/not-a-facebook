@@ -1,6 +1,7 @@
 import uuid from 'uuid';
 import Collection from '../utils/collection';
 
+const md5 = require('md5');
 // const user = {
 //   id: String
 //   username: String
@@ -18,8 +19,7 @@ import Collection from '../utils/collection';
 //   lastLoginDate: Date
 // };
 
-// TODO: implement encryption
-export const encrypt = (password) => password.split('').reverse().join('');
+export const encrypt = (password) => md5(password);
 
 export const initUserDocument = (username, password, profile) => ({
   username,
@@ -47,6 +47,10 @@ class Users {
   collection = new Collection('users')
 
   createAccount = (username, password, profile) => {
+    const isExist = !!this.collection.findOne({ username });
+    if (isExist) {
+      throw new Error('Username already taken!');
+    }
     const user = initUserDocument(username, password, profile);
     const accessToken = addAccessTokenToUser(user);
     this.collection.insert(user);
@@ -57,9 +61,9 @@ class Users {
     const encrypted = encrypt(password);
     const user = this.collection.findOne({ username, password: encrypted });
     if (!user) {
-      throw new Error('Username or password is not valid. Please try again!');
+      throw new Error('Invalid username or password!');
     }
-    // TODO: update last login date in the user's object
+    this.collection.updateOne({ id: user.id }, { lastLoginDate: new Date() });
     const accessToken = addAccessTokenToUser(user);
     return accessToken;
   }
