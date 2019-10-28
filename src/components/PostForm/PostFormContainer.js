@@ -3,22 +3,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PostForm from './PostForm';
 import { createPost } from '../../utils/creators';
+import UsersModule from '../../modules/users';
 
 class PostFormContainer extends Component {
   state = {
-    textAreaVisible: true,
+    textAreaVisible: false,
+    curUser: UsersModule.me(),
     body: '',
   }
 
   toggleTextArea = () => {
     // eslint-disable-next-line react/destructuring-assignment
-    this.setState((prevState) => ({ textAreaVisible: !prevState.textAreaVisible }));
+    this.setState((prevState) => ({
+      textAreaVisible: !prevState.textAreaVisible,
+    }));
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const { curUser } = this.state;
     const { handleAddPost } = this.props;
-    const post = createPost(e.target.body.value);
+    const post = createPost(e.target.body.value, curUser);
     handleAddPost(post);
     this.setState({ body: '' });
   }
