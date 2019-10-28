@@ -29,7 +29,7 @@ export class Users {
   resume = () => {
     if (this.token) {
       this.currentUser = this.me(this.token);
-      if (this.currentUser) this.logout(true);
+      if (!this.currentUser) this.logout(true);
     }
   }
 

@@ -37,11 +37,6 @@ export const generateAccessToken = () => ({
   token: uuid(),
   expiresAt: new Date(new Date().getTime() + THIRTY_MINUTES),
 });
-export const addAccessTokenToUser = (user) => {
-  const accessToken = generateAccessToken();
-  user.accessTokens.push(accessToken);
-  return accessToken;
-};
 
 class Users {
   collection = new Collection('users')
@@ -52,7 +47,7 @@ class Users {
       throw new Error('Username already taken!');
     }
     const user = initUserDocument(username, password, profile);
-    const accessToken = addAccessTokenToUser(user);
+    const accessToken = this.addAccessTokenToUser(user);
     this.collection.insert(user);
     return accessToken;
   }
@@ -64,7 +59,7 @@ class Users {
       throw new Error('Invalid username or password!');
     }
     this.collection.updateOne({ id: user.id }, { lastLoginDate: new Date() });
-    const accessToken = addAccessTokenToUser(user);
+    const accessToken = this.addAccessTokenToUser(user);
     return accessToken;
   }
 
@@ -80,14 +75,22 @@ class Users {
   // eslint-disable-next-line no-unused-vars
   findUserByToken = (token) => {
     const users = this.collection.find();
-    return users.find(({ accessTokens }) => {
+    const user = users.find(({ accessTokens }) => {
       const accessToken = accessTokens.find((a) => {
         if (a.token === token) return true;
         return false;
       });
       return accessToken;
     });
+    return user;
   }
+
+  addAccessTokenToUser = (user) => {
+    const accessToken = generateAccessToken();
+    const accessTokens = [...user.accessTokens, accessToken];
+    this.collection.updateOne({ id: user.id }, { accessTokens });
+    return accessToken;
+  };
 
 
   // get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])

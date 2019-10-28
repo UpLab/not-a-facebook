@@ -73,9 +73,15 @@ class Collection {
    */
   updateOne(selector, modifier, deep) {
     if (_.isEmpty(selector)) return undefined;
-    const doc = this.findOne(selector);
+    const doc = { ...this.findOne(selector) };
     if (deep) _.merge(doc, modifier);
     else _.assign(doc, modifier);
+    this.items = this.items.map((item) => {
+      if (item.id === doc.id) {
+        return doc;
+      }
+      return item;
+    });
     this._saveToStorage();
     return doc;
   }

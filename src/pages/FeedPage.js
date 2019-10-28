@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import { Redirect } from 'react-router-dom';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
 import PostsModel from '../modules/posts';
@@ -9,7 +10,7 @@ import UsersModel from '../modules/users';
 class FeedPage extends Component {
   state = {
     posts: PostsModel.get(),
-    curUser: UsersModel.me(),
+    currentUser: UsersModel.me(),
   }
 
   handleAddPost = (post) => {
@@ -19,8 +20,8 @@ class FeedPage extends Component {
   }
 
   handleRemovePost = (post) => {
-    const { curUser } = this.state;
-    if (_.isEqual(curUser.profile, post.creatorsProfile)) {
+    const { currentUser } = this.state;
+    if (_.isEqual(currentUser.profile, post.creatorsProfile)) {
       PostsModel.remove(post);
       const posts = PostsModel.get();
       this.setState({ posts });
@@ -28,11 +29,15 @@ class FeedPage extends Component {
   }
 
   render() {
-    const { posts } = this.state;
+    const { posts, currentUser } = this.state;
     return (
       <>
-        <PostForm handleAddPost={this.handleAddPost} />
-        <Feed posts={posts} handleRemovePost={this.handleRemovePost} />
+        { !currentUser ? (<Redirect to="/login" />) : (
+          <>
+            <PostForm handleAddPost={this.handleAddPost} />
+            <Feed posts={posts} handleRemovePost={this.handleRemovePost} />
+          </>
+        )}
       </>
     );
   }

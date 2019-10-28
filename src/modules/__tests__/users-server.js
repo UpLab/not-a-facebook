@@ -3,7 +3,6 @@ import UsersServer, {
   encrypt, initUserDocument,
   TOKEN_EXPIRATION_PERIOD,
   generateAccessToken,
-  addAccessTokenToUser,
 } from '../users-server';
 import { userFactory } from './utils';
 
@@ -50,7 +49,7 @@ describe('UsersServer helpers', () => {
       _id: faker.random.uuid(),
       accessTokens: [accessToken],
     };
-    const accessToken2 = addAccessTokenToUser(user);
+    const accessToken2 = UsersServer.addAccessTokenToUser(user);
     testAccessToken(accessToken2);
     expect(user.accessTokens.length).toBe(2);
     expect(user.accessTokens[1]).toBe(accessToken2);

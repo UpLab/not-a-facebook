@@ -7,7 +7,7 @@ import UsersModule from '../../modules/users';
 
 class PostFormContainer extends Component {
   state = {
-    textAreaVisible: false,
+    textAreaVisible: true,
     curUser: UsersModule.me(),
     body: '',
   }

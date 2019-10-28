@@ -1,8 +1,9 @@
 /* eslint-disable */
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const isProd = process.env.NODE_ENV === 'production';
 
-module.exports = {
+const config = {
   plugins: [
     new CopyPlugin([
       { from: 'public', to: '.' },
@@ -55,4 +56,21 @@ module.exports = {
   output: {
     filename: 'index.js'
   },
+  // Sets mode as required by webpack
+  mode: isProd ? 'production' : 'development',
+
+  // Include source maps in development files
+  devtool: isProd ? false : '#cheap-module-source-map',
 };
+
+if (!isProd) {
+  config.devServer = {
+    contentBase: path.resolve(__dirname, '..', 'static'),
+    hot: true,
+    publicPath: '/',
+    historyApiFallback: true,
+    open: true
+  }
+}
+
+module.exports = config;
