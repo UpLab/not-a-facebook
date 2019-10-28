@@ -89,6 +89,8 @@ class Users {
     const accessToken = generateAccessToken();
     const accessTokens = [...user.accessTokens, accessToken];
     this.collection.updateOne({ id: user.id }, { accessTokens });
+    // eslint-disable-next-line no-param-reassign
+    user.accessTokens = accessTokens;
     return accessToken;
   };
 
