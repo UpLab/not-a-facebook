@@ -1,3 +1,4 @@
+/* eslint-disable */
 import faker from 'faker';
 
 export const profileFactory = () => ({
@@ -11,3 +12,5 @@ export const userFactory = () => ({
   password: faker.internet.password(),
   profile: profileFactory(),
 });
+
+test.skip('skip', () => {});

@@ -1,7 +1,8 @@
 # Not A Facebook
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![CircleCI](https://circleci.com/gh/UpLab/not-a-facebook/tree/master.svg?style=svg)](https://circleci.com/gh/UpLab/not-a-facebook/tree/master)
+
+[![Build Status](https://travis-ci.com/UpLab/not-a-facebook.svg?branch=master)](https://travis-ci.com/UpLab/not-a-facebook)
 
 A React app for UpLab BootCamp 2019 - React Intensive
 

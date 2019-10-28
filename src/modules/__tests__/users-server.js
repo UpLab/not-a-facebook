@@ -96,10 +96,16 @@ describe('UsersServer', () => {
       });
     });
     describe('it should not be possible to register with duplicate username', () => {
-      UsersServer.collection.remove();
-      const { username, password, profile } = userFactory();
+      let username;
+      let profile;
       const { password: password2, profile: profile2 } = userFactory();
-      UsersServer.createAccount(username, password, profile);
+      beforeAll(() => {
+        UsersServer.collection.remove();
+        const { username: _username, password, profile: _profile } = userFactory();
+        username = _username;
+        profile = _profile;
+        UsersServer.createAccount(username, password, profile);
+      });
       test('throws error', () => {
         expect(() => UsersServer.createAccount(username, password2, profile2)).toThrow();
       });
