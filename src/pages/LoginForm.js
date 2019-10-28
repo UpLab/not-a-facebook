@@ -31,6 +31,7 @@ class LoginForm extends Component {
       } else {
         UsersModel.createAccount(username, password, mockProfile());
       }
+      this.setState({ error: { active: false, message: '' } });
     } catch (error) {
       this.setState({ error: { active: true, message: error } });
     }

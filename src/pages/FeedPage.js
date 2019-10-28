@@ -18,6 +18,7 @@ class FeedPage extends Component {
       UsersModel.addPost(post);
       const posts = PostsModel.get();
       this.setState({ posts });
+      this.setState({ error: { active: false, message: '' } });
     } catch (error) {
       this.setState({ error: { active: true, message: error } });
     }
@@ -28,6 +29,7 @@ class FeedPage extends Component {
       PostsModel.remove(post);
       const posts = PostsModel.get();
       this.setState({ posts });
+      this.setState({ error: { active: false, message: '' } });
     } catch (error) {
       this.setState({ error: { active: true, message: error } });
     }

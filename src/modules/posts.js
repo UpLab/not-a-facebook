@@ -7,7 +7,7 @@ class Posts {
 
   get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])
 
-  add = ({ body }) => {
+  add = (body) => {
     if (UsersModel.isLoggedIn()) {
       const { id, profile: { firstName, lastName, avatar } } = UsersModel.me();
       this.collection.insert({
