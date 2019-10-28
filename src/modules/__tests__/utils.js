@@ -11,3 +11,6 @@ export const userFactory = () => ({
   password: faker.internet.password(),
   profile: profileFactory(),
 });
+
+// eslint-disable-next-line jest/no-disabled-tests
+test.skip('skip', () => {});
