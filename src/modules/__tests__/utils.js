@@ -1,3 +1,4 @@
+/* eslint-disable */
 import faker from 'faker';
 
 export const profileFactory = () => ({
@@ -12,5 +13,4 @@ export const userFactory = () => ({
   profile: profileFactory(),
 });
 
-// eslint-disable-next-line jest/no-disabled-tests
 test.skip('skip', () => {});
