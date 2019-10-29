@@ -4,10 +4,12 @@ import {
   ListGroupItem, Media,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import UsersModule from '../modules/users';
+import UsersModel from '../modules/users';
+import routes from '../routes';
 // eslint-disable-next-line no-unused-vars
 const Post = ({ body, ownerId, handleRemovePost }) => {
-  const owner = UsersModule.getUser(ownerId);
+  const me = UsersModel.me();
+  const owner = UsersModel.getUser(ownerId);
   const { avatar, firstName, lastName } = owner.profile;
 
   return (
@@ -22,10 +24,10 @@ const Post = ({ body, ownerId, handleRemovePost }) => {
               style={{ borderRadius: '5px' }}
               alt="pic"
             />
-            <Link className="text-body" to={`/profile/${owner.id}`}>{firstName}  {lastName}</Link>
+            <Link className="text-body" to={`${routes.profile}/${owner.id}`}>{firstName}  {lastName}</Link>
           </ListGroupItem>
           <ListGroupItem><p className="text-muted">{body}</p></ListGroupItem>
-          <Button color="danger" onClick={handleRemovePost}>remove</Button>
+          {me.id === ownerId ? <Button color="danger" onClick={handleRemovePost}>remove</Button> : null}
         </CardBody>
       </Card>
     </div>
@@ -39,10 +41,7 @@ const Feed = ({ posts, handleRemovePost }) => (
         key={post.id}
         body={post.body}
         ownerId={post.ownerId}
-        handleRemovePost={() => handleRemovePost({
-          id: post.id,
-          creatorsProfile: post.creatorsProfile,
-        })}
+        handleRemovePost={() => handleRemovePost({ id: post.id })}
       />
     ))}
   </div>

@@ -13,6 +13,7 @@ import {
 } from 'reactstrap';
 import { Link, Redirect } from 'react-router-dom';
 import UsersModel from '../modules/users';
+import routes from '../routes';
 
 const MainLayout = ({ children, history }) => {
   const currentUser = UsersModel.me();
@@ -22,12 +23,12 @@ const MainLayout = ({ children, history }) => {
 
   const handleLogout = () => {
     UsersModel.logout();
-    history.replace('/login');
+    history.replace(routes.login);
   };
 
   return (
     <>
-      {!currentUser ? <Redirect to="/login" /> : (
+      {!currentUser ? <Redirect to={routes.login} /> : (
         <div>
           <Navbar color="light" light expand="md">
             <NavbarBrand href="/">NAF</NavbarBrand>
@@ -40,8 +41,13 @@ const MainLayout = ({ children, history }) => {
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem>
-                      <Link to="/profile">
+                      <Link to={routes.profile}>
                         Profile
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <Link to={routes.home}>
+                        Feed
                       </Link>
                     </DropdownItem>
                     <DropdownItem onClick={handleLogout}>

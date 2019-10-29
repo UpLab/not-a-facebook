@@ -27,7 +27,7 @@ const UserProfilePage = (props) => {
           />
           <p className="text-muted">userName: {username}</p>
           <p className="text-muted">name: {firstName}  {lastName}</p>
-          <p className="text-muted">Last login date: {lastLoginDate}</p>
+          <p className="text-muted">Last login date: {typeof lastLoginDate === 'object' ? lastLoginDate[0] : lastLoginDate}</p>
         </CardBody>
       </Card>
     </>

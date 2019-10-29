@@ -5,6 +5,7 @@ import {
 import faker from 'faker';
 import { Link } from 'react-router-dom';
 import UsersModel from '../modules/users';
+import routes from '../routes';
 
 const mockProfile = () => ({
   firstName: faker.name.firstName(),
@@ -29,7 +30,7 @@ class LoginForm extends Component {
       } else {
         UsersModel.createAccount(username, password, mockProfile());
       }
-      history.push('/feed');
+      history.push(routes.feed);
     } catch (err) {
       this.setState({ errLogin: { active: true, msg: err } });
     }
@@ -82,17 +83,19 @@ class LoginForm extends Component {
               color="secondary"
               disabled={!(username && password)}
             >
-              { isLogin ? 'Log In' : 'Sign Up' }
+              {isLogin ? 'Log In' : 'Sign Up'}
             </Button>
             <div>
               {
                 isLogin ? (
                   <div>
-                    Don&apos;t have an account? <Link to="/sign-up">Sign up</Link>
+                    Don&apos;t have an account? <Link to={routes.signUp}>Sign up</Link>
+                    <br />
+                    Forgot password? <Link to={routes.forgotPassword}>Reset password</Link>
                   </div>
                 ) : (
                   <div>
-                    Already have an account? <Link to="/login">Login</Link>
+                      Already have an account? <Link to={routes.login}>Login</Link>
                   </div>
                 )
               }

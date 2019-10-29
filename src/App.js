@@ -10,12 +10,13 @@ import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import routes from './routes';
 
 const App = () => (
   <Router>
     <Switch>
       <Route
-        path="/login"
+        path={routes.login}
         render={(props) => (
           <AuthLayout {...props}>
             <LoginFormPage isLogin {...props} />
@@ -23,18 +24,33 @@ const App = () => (
         )}
       />
       <Route
-        path="/sign-up"
+        path={routes.signUp}
         render={(props) => (
           <AuthLayout {...props}>
             <LoginFormPage isLogin={false} {...props} />
           </AuthLayout>
         )}
       />
-      <Route path="/feed" render={(props) => <MainLayout {...props}><FeedPage {...props} /></MainLayout>} />
-      <Route path="/profile" exact render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>} />
-      <Route path="/forgot-password" exact render={(props) => <MainLayout {...props}><ForgotPasswordPage {...props} /></MainLayout>} />
-      <Route path="/profile/:id" exact render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>} />
-      <Redirect from="/" to="/feed" exact />
+      <Route
+        path={routes.feed}
+        render={(props) => <MainLayout {...props}><FeedPage {...props} /></MainLayout>}
+      />
+      <Route
+        path={routes.profile}
+        exact
+        render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>}
+      />
+      <Route
+        path={routes.forgotPassword}
+        exact
+        render={(props) => <AuthLayout {...props}><ForgotPasswordPage {...props} /></AuthLayout>}
+      />
+      <Route
+        path={routes.profileId}
+        exact
+        render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>}
+      />
+      <Redirect from={routes.home} to={routes.feed} exact />
       <Route render={(props) => (
         <NotFoundPage {...props} />
       )}
