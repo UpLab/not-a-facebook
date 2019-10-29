@@ -9,6 +9,7 @@ import FeedPage from './pages/FeedPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 const App = () => (
   <Router>
@@ -31,6 +32,7 @@ const App = () => (
       />
       <Route path="/feed" render={(props) => <MainLayout {...props}><FeedPage {...props} /></MainLayout>} />
       <Route path="/profile" exact render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>} />
+      <Route path="/forgot-password" exact render={(props) => <MainLayout {...props}><ForgotPasswordPage {...props} /></MainLayout>} />
       <Route path="/profile/:id" exact render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>} />
       <Redirect from="/" to="/feed" exact />
       <Route render={(props) => (
