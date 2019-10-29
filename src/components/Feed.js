@@ -22,7 +22,7 @@ const Post = ({ body, ownerId, handleRemovePost }) => {
               style={{ borderRadius: '5px' }}
               alt="pic"
             />
-            <Link className='text-body' to={`/profile/${owner.id}`}>{firstName}  {lastName}</Link>
+            <Link className="text-body" to={`/profile/${owner.id}`}>{firstName}  {lastName}</Link>
           </ListGroupItem>
           <ListGroupItem><p className="text-muted">{body}</p></ListGroupItem>
           <Button color="danger" onClick={handleRemovePost}>remove</Button>

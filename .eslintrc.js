@@ -20,6 +20,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'linebreak-style': 'off',
-    'jsx-quotes': 'off',
+    'react/jsx-wrap-multilines': 'off',
   }
 };
