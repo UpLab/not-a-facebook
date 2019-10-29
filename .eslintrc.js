@@ -19,5 +19,7 @@ module.exports = {
     'react/state-in-constructor': 'off',
     'no-underscore-dangle': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    'linebreak-style': 'off',
+    'jsx-quotes': 'off',
   }
 };

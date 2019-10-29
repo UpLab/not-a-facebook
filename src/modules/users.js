@@ -5,7 +5,7 @@ export const ACCESS_TOKEN_STORAGE_KEY = '__access_token__';
 export class Users {
   currentUser = null
 
-  token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY)
+  token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
 
   constructor() {
     this.resume();
@@ -21,15 +21,17 @@ export class Users {
   }
 
   createAccount = (username, password, profile) => {
-    const accessToken = UsersServer.createAccount(username, password, profile);
+    const accessToken = UsersServer.createAccount(username.trim(), password.trim(), profile);
     this.setToken(accessToken);
     this.currentUser = this.me(this.token);
   }
 
   resume = () => {
+    this.token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+
     if (this.token) {
       this.currentUser = this.me(this.token);
-      if (!this.currentUser) this.logout(true);
+      //  if (this.currentUser) this.logout(true);
     }
   }
 
@@ -40,28 +42,16 @@ export class Users {
   }
 
   logout = (skipServer) => {
-    if (skipServer) {
+    if (!skipServer) {
       UsersServer.logout(this.token);
     }
-
+    this.currentUser = this.me(this.token);
     this.setToken({ token: '' });
   }
 
-  // default user
-  deftUser = () => ({
-    username: '',
-    password: '',
-    profile: {
-      firstName: '',
-      lastName: '',
-      avatar: 'http://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png',
-    },
-    lastLoginDate: '',
-    accessTokens: [],
-    id: '',
-  });
-
   me = () => UsersServer.findUserByToken(this.token)
+
+  getUser = (id) => UsersServer.findUserById(id)
 
   isLoggedIn = () => !!this.token
 }

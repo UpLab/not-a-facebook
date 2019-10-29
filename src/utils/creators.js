@@ -1,9 +1,7 @@
-import faker from 'faker';
-
-faker.locale = 'ru';
+import uuid from 'uuid/v4';
 // eslint-disable-next-line import/prefer-default-export
 export const createPost = (value, user) => ({
-  id: faker.random.uuid(),
+  id: uuid(),
   body: value,
-  creatorsProfile: user.profile,
+  ownerId: user.id,
 });

@@ -9,10 +9,11 @@ class UserProfilePage extends Component {
   }
 
   render() {
+    console.log(this.props);
     const { currentUser } = this.state;
     return (
       <>
-        { !currentUser ? (<Redirect to="/login" />) : (
+        {!currentUser ? (<Redirect to="/login" />) : (
           <>
             Hello world
           </>

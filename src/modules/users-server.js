@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import _ from 'lodash';
 import Collection from '../utils/collection';
 
 const md5 = require('md5');
@@ -84,6 +85,8 @@ class Users {
     });
     return user;
   }
+
+  findUserById = (id) => _.find(this.collection.find(), { id });
 
   addAccessTokenToUser = (user) => {
     const accessToken = generateAccessToken();
