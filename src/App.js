@@ -2,13 +2,13 @@ import React from 'react';
 import {
   BrowserRouter as Router, Switch, Route, Redirect,
 } from 'react-router-dom';
-import { Container } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import UserProfilePage from './pages/UserProfilePage';
 import LoginFormPage from './pages/LoginFormPage';
 import FeedPage from './pages/FeedPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
+import AuthLayout from './layouts/AuthLayout';
 
 const App = () => (
   <Router>
@@ -16,17 +16,17 @@ const App = () => (
       <Route
         path="/login"
         render={(props) => (
-          <Container>
+          <AuthLayout {...props}>
             <LoginFormPage isLogin {...props} />
-          </Container>
+          </AuthLayout>
         )}
       />
       <Route
         path="/sign-up"
         render={(props) => (
-          <Container>
+          <AuthLayout {...props}>
             <LoginFormPage isLogin={false} {...props} />
-          </Container>
+          </AuthLayout>
         )}
       />
       <Route path="/feed" render={(props) => <MainLayout {...props}><FeedPage {...props} /></MainLayout>} />
@@ -34,9 +34,7 @@ const App = () => (
       <Route path="/profile/:id" exact render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>} />
       <Redirect from="/" to="/feed" exact />
       <Route render={(props) => (
-        <MainLayout {...props}>
-          <NotFoundPage />
-        </MainLayout>
+        <NotFoundPage {...props} />
       )}
       />
     </Switch>
