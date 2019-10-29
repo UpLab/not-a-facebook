@@ -26,8 +26,7 @@ const MainLayout = ({ children, history }) => {
   };
 
   return (
-    <div>
-
+    <>
       {!currentUser ? <Redirect to="/login" /> : (
         <div>
           <Navbar color="light" light expand="md">
@@ -57,7 +56,7 @@ const MainLayout = ({ children, history }) => {
             {children}
           </Container>
         </div>)}
-    </div>
+    </>
   );
 };
 
