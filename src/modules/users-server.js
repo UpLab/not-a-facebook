@@ -97,6 +97,7 @@ class Users {
     return accessToken;
   };
 
+  findUserByUserName = (username) => this.collection.findOne({ username });
 
   // get = () => _.orderBy(this.collection.find({}), ['createdAt'], ['desc'])
 

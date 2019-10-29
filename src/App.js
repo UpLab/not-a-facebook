@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import UserProfilePage from './pages/UserProfilePage';
+import UserPage from './pages/UserPage';
 import LoginFormPage from './pages/LoginFormPage';
 import FeedPage from './pages/FeedPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -32,6 +33,12 @@ const App = () => (
         )}
       />
       <Route
+        path={routes.forgotPassword}
+        exact
+        render={(props) => <AuthLayout {...props}><ForgotPasswordPage {...props} /></AuthLayout>}
+      />
+
+      <Route
         path={routes.feed}
         render={(props) => <MainLayout {...props}><FeedPage {...props} /></MainLayout>}
       />
@@ -41,14 +48,9 @@ const App = () => (
         render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>}
       />
       <Route
-        path={routes.forgotPassword}
-        exact
-        render={(props) => <AuthLayout {...props}><ForgotPasswordPage {...props} /></AuthLayout>}
-      />
-      <Route
         path={routes.profileId}
         exact
-        render={(props) => <MainLayout {...props}><UserProfilePage {...props} /></MainLayout>}
+        render={(props) => <MainLayout {...props}><UserPage {...props} /></MainLayout>}
       />
       <Redirect from={routes.home} to={routes.feed} exact />
       <Route render={(props) => (

@@ -54,6 +54,8 @@ export class Users {
   getUser = (id) => UsersServer.findUserById(id)
 
   isLoggedIn = () => !!this.token
+
+  getUserByUsername = (username) => UsersServer.findUserByUserName(username);
 }
 
 export default new Users();
