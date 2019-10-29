@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Collapse,
   Navbar,
@@ -14,24 +14,31 @@ import {
 import { Link, Redirect } from 'react-router-dom';
 import UsersModel from '../modules/users';
 import routes from '../routes';
+import ThemeContext from '../contexts/Theme';
 
 const MainLayout = ({ children, history }) => {
   const currentUser = UsersModel.me();
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
+  const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     UsersModel.logout();
     history.replace(routes.login);
-  };
+  }, [history]);
+
+  const [theme, setTheme] = React.useState('light');
 
   return (
-    <>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {!currentUser ? <Redirect to={routes.login} /> : (
         <div>
           <Navbar color="light" light expand="md">
-            <NavbarBrand href="/">NAF</NavbarBrand>
+            <NavbarBrand>
+              <Link to={routes.home}>
+                NAF
+              </Link>
+            </NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
               <Nav className="ml-auto" navbar>
@@ -62,7 +69,7 @@ const MainLayout = ({ children, history }) => {
             {children}
           </Container>
         </div>)}
-    </>
+    </ThemeContext.Provider>
   );
 };
 
