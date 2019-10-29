@@ -7,9 +7,9 @@ import UserModel from '../modules/users';
 // eslint-disable-next-line react/prefer-stateless-function
 class UserPage extends React.Component {
   render() {
-    const { match: { params: { id } } } = this.props;
-    // const user = UserModel.getUserByUsername(id);
-    const user = UserModel.getUser(id);
+    const { match: { params: { username } } } = this.props;
+    const user = UserModel.getUserByUsername(username);
+    // const user = UserModel.getUser(id);
     const { profile } = user;
     return (
       <div>

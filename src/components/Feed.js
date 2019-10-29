@@ -24,7 +24,7 @@ const Post = ({ body, ownerId, handleRemovePost }) => {
               style={{ borderRadius: '5px' }}
               alt="pic"
             />
-            <Link className="text-body" to={`${routes.profile}/${owner.id}`}>{firstName}  {lastName}</Link>
+            <Link className="text-body" to={`${routes.profile}/${owner.username}`}>{firstName} {lastName}</Link>
           </ListGroupItem>
           <ListGroupItem><p className="text-muted">{body}</p></ListGroupItem>
           {me.id === ownerId ? <Button color="danger" onClick={handleRemovePost}>remove</Button> : null}
@@ -39,9 +39,8 @@ const Feed = ({ posts, handleRemovePost }) => (
     {posts.map((post) => (
       <Post
         key={post.id}
-        body={post.body}
-        ownerId={post.ownerId}
         handleRemovePost={() => handleRemovePost({ id: post.id })}
+        {...post}
       />
     ))}
   </div>

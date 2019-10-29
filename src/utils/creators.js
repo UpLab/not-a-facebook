@@ -4,4 +4,5 @@ export const createPost = (value, user) => ({
   id: uuid(),
   body: value,
   ownerId: user.id,
+  ownerUsername: user.username,
 });

@@ -5,7 +5,7 @@ const routes = {
   feed: '/feed',
   notfound: '/notfound',
   profile: '/profile',
-  profileId: '/profile/:id',
+  profileId: '/profile/:username',
   forgotPassword: '/forgot-password',
 };
 export default routes;
