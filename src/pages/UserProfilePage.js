@@ -1,21 +1,52 @@
-import React, { useContext } from 'react';
+import React, {
+  useContext, useMemo, useState, useCallback,
+} from 'react';
 import {
   Col, Form, Button, FormGroup, Label, Input, Media,
 } from 'reactstrap';
-import useUserForm from '../hooks/useUserForm';
+import { toast } from 'react-toastify';
 import ThemeContext from '../contexts/Theme';
+import UsersModel from '../modules/users';
+import Uploader from '../modules/uploader';
 import Select from '../components/Select';
-// import posts from '../__mocks__/posts';
 
-// const heavyReverseUsername = (username) => {
-//   const n = 1;
-//   [...new Array(n)].forEach(() => username.split('').reverse().join(''));
-//   const reverse = username.split('').reverse().join('');
-//   return reverse;
-// };
 
-const UserProfilePage = ({ handleSubmit }) => {
-  const [state, handleChange] = useUserForm();
+const useUserForm = (user) => {
+  const currentUser = useMemo(() => user || UsersModel.me(), [user]);
+  const [state, setState] = useState({
+    avatar: currentUser.profile.avatar,
+    newAvatar: null,
+    username: currentUser.username,
+    firstName: currentUser.profile.firstName,
+    lastName: currentUser.profile.lastName,
+    password: '',
+  });
+
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setState((s) => ({ ...s, [name]: value }));
+  }, []);
+
+  const handleSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    const newAvatar = e.target.newAvatar.files[0];
+    if (newAvatar) {
+      try {
+        const url = await Uploader.upload(newAvatar);
+        handleChange({ target: { value: url, name: 'avatar' } });
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    // TODO: update user
+  }, [handleChange]);
+
+  return [state, handleChange, handleSubmit];
+};
+
+
+const UserProfilePage = () => {
+  const [state, handleChange, handleSubmit] = useUserForm();
   const {
     username, firstName, lastName, password, avatar,
   } = state;
@@ -28,7 +59,7 @@ const UserProfilePage = ({ handleSubmit }) => {
       <Form onSubmit={handleSubmit}>
         <FormGroup row>
           <Col sm={12}>
-            <Media className="avatar" src={avatar} />
+            <Media className="avatar" src={avatar} height={150} width={150} />
           </Col>
         </FormGroup>
         <FormGroup row>
@@ -85,11 +116,11 @@ const UserProfilePage = ({ handleSubmit }) => {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="exampleFile" sm={3}>
+          <Label sm={3}>
             Avatar
           </Label>
           <Col sm={9}>
-            <Input type="file" name="file" id="exampleFile" />
+            <Input type="file" name="newAvatar" onChange={handleChange} />
           </Col>
         </FormGroup>
         <FormGroup check row>

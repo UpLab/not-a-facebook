@@ -1,6 +1,7 @@
 /* eslint-disable */
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const isProd = process.env.NODE_ENV === 'production';
 
 const config = {
@@ -8,6 +9,7 @@ const config = {
     new CopyPlugin([
       { from: 'public', to: '.' },
     ]),
+    new Dotenv(),
   ],
   module: {
     rules: [

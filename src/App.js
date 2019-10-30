@@ -3,6 +3,8 @@ import {
   BrowserRouter as Router, Switch, Route, Redirect,
 } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import UserProfilePage from './pages/UserProfilePage';
 import UserPage from './pages/UserPage';
 import LoginFormPage from './pages/LoginFormPage';
@@ -12,6 +14,7 @@ import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import routes from './routes';
+import './modules/uploader';
 
 const App = () => (
   <Router>
@@ -58,6 +61,7 @@ const App = () => (
       )}
       />
     </Switch>
+    <ToastContainer />
   </Router>
 );
 
