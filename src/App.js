@@ -13,6 +13,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import Promises from './pages/Promises';
 import routes from './routes';
 import './modules/uploader';
 
@@ -26,6 +27,10 @@ const App = () => (
             <LoginFormPage isLogin {...props} />
           </AuthLayout>
         )}
+      />
+      <Route
+        path="/promises"
+        component={Promises}
       />
       <Route
         path={routes.signUp}
