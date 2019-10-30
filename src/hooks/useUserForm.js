@@ -10,6 +10,7 @@ const useUserForm = (user) => {
     lastName: currentUser.profile.lastName,
     password: '',
   });
+
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setState((s) => ({ ...s, [name]: value }));

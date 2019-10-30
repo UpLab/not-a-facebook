@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import UsersModel from '../modules/users';
 import routes from '../routes';
 // eslint-disable-next-line no-unused-vars
-const Post = ({ body, ownerId, handleRemovePost }) => {
+const Post = ({ handleRemovePost, body, ownerId }) => {
   const me = UsersModel.me();
   const owner = UsersModel.getUser(ownerId);
   const { avatar, firstName, lastName } = owner.profile;
@@ -24,7 +24,9 @@ const Post = ({ body, ownerId, handleRemovePost }) => {
               style={{ borderRadius: '5px' }}
               alt="pic"
             />
-            <Link className="text-body" to={`${routes.profile}/${owner.username}`}>{firstName} {lastName}</Link>
+            <Link className="text-body" to={`${routes.profile}/${me.id !== ownerId ? owner.username : ''}`}>
+              <b style={{ color: 'white' }}>{` ${firstName}`} {lastName}</b>
+            </Link>
           </ListGroupItem>
           <ListGroupItem><p className="text-muted">{body}</p></ListGroupItem>
           {me.id === ownerId ? <Button color="danger" onClick={handleRemovePost}>remove</Button> : null}
