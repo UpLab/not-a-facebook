@@ -27,6 +27,10 @@ Node version: v10.14.2
 - CicleCI
 - Jest
 
+## Setup
+
+1. Create an `.env` file by `.env.example`. You need to create an account on Imgur.com in order to get client id for image uploading. To get client id, you can create an app here https://api.imgur.com/oauth2/addclient
+2. `npm i`
 
 ## Available Scripts
 
