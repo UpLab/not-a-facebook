@@ -35,12 +35,9 @@ const useUserForm = (user) => {
     } = state;
     const userByUserName = UsersModel.getUserByUsername(username);
     const encryptPassword = UsersModel.encrypt(password);
-
     if (password !== '' && encryptPassword !== currentUser.password) throw new Error('invalid password');
     if (password !== '' && newPassword === '') throw new Error('invalid  new password');
-
     if (userByUserName && userByUserName.id !== currentUser.id) throw new Error('Username already taken!');
-
     if (firstName !== '' && lastName !== '' && username !== '') return true;
     throw new Error('invalid date');
   }, [currentUser.id, currentUser.password, state]);

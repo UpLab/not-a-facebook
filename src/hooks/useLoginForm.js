@@ -6,12 +6,12 @@ import routes from '../routes';
 
 const reduce = (state, action) => {
   switch (action.type) {
-    case 'change':
-      return { ...state, [action.name]: action.value };
-    case 'err':
-      return { ...state, errLogin: { active: true, msg: action.msg } };
-    default:
-      return state;
+  case 'change':
+    return { ...state, [action.name]: action.value };
+  case 'err':
+    return { ...state, errLogin: { active: true, msg: action.msg } };
+  default:
+    return state;
   }
 };
 

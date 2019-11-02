@@ -5,14 +5,14 @@ import UsersModule from '../modules/users';
 
 const reduce = (state, action) => {
   switch (action.type) {
-    case 'changeVisible':
-      return { ...state, textAreaVisible: action.visible };
-    case 'setBody':
-      return { ...state, body: action.body };
-    case 'inputValueChange':
-      return { ...state, [action.name]: action.value };
-    default:
-      return state;
+  case 'changeVisible':
+    return { ...state, textAreaVisible: action.visible };
+  case 'setBody':
+    return { ...state, body: action.body };
+  case 'inputValueChange':
+    return { ...state, [action.name]: action.value };
+  default:
+    return state;
   }
 };
 

@@ -27,7 +27,14 @@ const Post = ({
               style={{ borderRadius: '5px', paddingRight: '5px' }}
               alt="pic"
             /><Link className="text-body" to={`${routes.profile}/${me.id !== ownerId ? owner.username : ''}`}>{firstName} {lastName}</Link>
-            {me.id === ownerId ? <Button color="danger" onClick={handleRemovePost}>remove</Button> : null}
+            {me.id === ownerId
+              ? <Button
+                className="float-right my-auto"
+                style={{
+                  border: '0px', backgroundColor: 'transparent', fontWeight: 'bold', color: 'black',
+                }}
+                onClick={handleRemovePost}
+              >X</Button> : null}
             <p className="text-muted">{time}</p>
           </ListGroupItem>
           <ListGroupItem style={{ minHeight: 'inherit' }}>

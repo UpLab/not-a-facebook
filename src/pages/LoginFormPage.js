@@ -27,7 +27,7 @@ const LoginForm = (props) => {
             name="username"
             placeholder="Username"
             value={username}
-              // pattern="^[a-z0-9_-]{3,15}$"
+            // pattern="^[a-z0-9_-]{3,15}$"
             onChange={handleChange}
           />
           <Input
@@ -35,8 +35,8 @@ const LoginForm = (props) => {
             name="password"
             placeholder="password"
             value={password}
-              // title="Для прикладу: 1Aaaaaaa"
-              // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+            // title="Для прикладу: 1Aaaaaaa"
+            // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$"
             onChange={handleChange}
           />
           <Button
@@ -49,18 +49,18 @@ const LoginForm = (props) => {
           </Button>
           <div>
             {
-                isLogin ? (
-                  <div>
+              isLogin ? (
+                <div>
                     Don&apos;t have an account? <Link to={routes.signUp}>Sign up</Link>
-                    <br />
+                  <br />
                     Forgot password? <Link to={routes.forgotPassword}>Reset password</Link>
-                  </div>
-                ) : (
-                  <div>
+                </div>
+              ) : (
+                <div>
                       Already have an account? <Link to={routes.login}>Login</Link>
-                  </div>
-                )
-              }
+                </div>
+              )
+            }
           </div>
         </div>
       </Form>
