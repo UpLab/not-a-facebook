@@ -2,7 +2,7 @@ import React, {
   useContext, useMemo, useState, useCallback,
 } from 'react';
 import {
-  Col, Form, Button, FormGroup, Label, Input, Media,
+  Col, Form, Button, FormGroup, Label, Input, Media, Spinner,
 } from 'reactstrap';
 import { toast } from 'react-toastify';
 import ThemeContext from '../contexts/Theme';
@@ -20,6 +20,8 @@ const useUserForm = (user) => {
     firstName: currentUser.profile.firstName,
     lastName: currentUser.profile.lastName,
     password: '',
+    newPassword: '',
+    isUploading: false,
   });
 
   const handleChange = useCallback((e) => {
@@ -27,19 +29,60 @@ const useUserForm = (user) => {
     setState((s) => ({ ...s, [name]: value }));
   }, []);
 
+  const validation = useCallback(() => {
+    const {
+      firstName, lastName, password, newPassword, username,
+    } = state;
+    const userByUserName = UsersModel.getUserByUsername(username);
+    const encryptPassword = UsersModel.encrypt(password);
+
+    if (password !== '' && encryptPassword !== currentUser.password) throw new Error('invalid password');
+    if (password !== '' && newPassword === '') throw new Error('invalid  new password');
+
+    if (userByUserName && userByUserName.id !== currentUser.id) throw new Error('Username already taken!');
+
+    if (firstName !== '' && lastName !== '' && username !== '') return true;
+    throw new Error('invalid date');
+  }, [currentUser.id, currentUser.password, state]);
+
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    const newAvatar = e.target.newAvatar.files[0];
-    if (newAvatar) {
-      try {
-        const url = await Uploader.upload(newAvatar);
-        handleChange({ target: { value: url, name: 'avatar' } });
-      } catch (error) {
-        toast.error(error.message);
+    let newAvatar = e.target.newAvatar.files[0];
+    let newUser;
+    const {
+      firstName, lastName, password, newPassword, username, avatar,
+    } = state;
+    try {
+      if (password === '') {
+        newUser = {
+          id: currentUser.id,
+          username,
+          profile: { firstName, lastName, avatar },
+        };
+      } else {
+        newUser = {
+          id: currentUser.id,
+          username,
+          password: UsersModel.encrypt(newPassword),
+          profile: { firstName, lastName, avatar },
+        };
       }
+      validation();
+      if (newAvatar) {
+        setState((s) => ({ ...s, isUploading: true }));
+        const url = await Uploader.upload(newAvatar);
+        newAvatar = url || avatar;
+        setState((s) => ({ ...s, avatar: newAvatar, isUploading: false }));
+        newUser.profile.avatar = newAvatar;
+      }
+
+      UsersModel.update(newUser);
+      toast.success('Success');
+    } catch (error) {
+      setState((s) => ({ ...s, isUploading: false }));
+      toast.error(error.message);
     }
-    // TODO: update user
-  }, [handleChange]);
+  }, [currentUser.id, state, validation]);
 
   return [state, handleChange, handleSubmit];
 };
@@ -48,7 +91,7 @@ const useUserForm = (user) => {
 const UserProfilePage = () => {
   const [state, handleChange, handleSubmit] = useUserForm();
   const {
-    username, firstName, lastName, password, avatar,
+    username, firstName, lastName, password, avatar, newPassword, isUploading,
   } = state;
 
   const { theme, setTheme } = useContext(ThemeContext);
@@ -103,14 +146,28 @@ const UserProfilePage = () => {
         </FormGroup>
         <FormGroup row>
           <Label for="password" sm={3}>
-            Change password
+            password
+          </Label>
+          <Col sm={9}>
+            <Input
+              type="password"
+              placeholder="password"
+              name="password"
+              value={password}
+              onChange={handleChange}
+            />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="new password" sm={3}>
+            New password
           </Label>
           <Col sm={9}>
             <Input
               type="password"
               placeholder="new password"
-              name="password"
-              value={password}
+              name="newPassword"
+              value={newPassword}
               onChange={handleChange}
             />
           </Col>
@@ -122,8 +179,9 @@ const UserProfilePage = () => {
           <Col sm={9}>
             <Input type="file" name="newAvatar" onChange={handleChange} />
           </Col>
+
         </FormGroup>
-        <FormGroup check row>
+        <FormGroup check row> {isUploading ? <Spinner style={{ width: '2rem', height: '2rem' }} /> : null}
           <Col sm={{ offset: 9 }}>
             <Button>Submit</Button>
           </Col>

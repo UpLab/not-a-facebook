@@ -1,4 +1,4 @@
-import UsersServer from './users-server';
+import UsersServer, { encrypt } from './users-server';
 
 export const ACCESS_TOKEN_STORAGE_KEY = '__access_token__';
 
@@ -56,6 +56,10 @@ export class Users {
   isLoggedIn = () => !!this.token
 
   getUserByUsername = (username) => UsersServer.findUserByUserName(username);
+
+  update = (user) => UsersServer.updateAccount(user);
+
+  encrypt = (password) => encrypt(password);
 }
 
 export default new Users();
