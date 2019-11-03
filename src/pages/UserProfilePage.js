@@ -39,7 +39,7 @@ const useUserForm = (user) => {
     if (!_.isEmpty(password) && encryptPassword !== currentUser.password) throw new Error('invalid password');
     if (!_.isEmpty(password) && _.isEmpty(newPassword)) throw new Error('invalid  new password');
     if (userByUserName && userByUserName.id !== currentUser.id) throw new Error('Username already taken!');
-    if (_.isEmpty(firstName) && _.isEmpty(lastName) && _.isEmpty(username)) throw new Error('invalid date');
+    if (_.isEmpty(firstName) || _.isEmpty(lastName) || _.isEmpty(username)) throw new Error('invalid date');
     return true;
   }, [currentUser.id, currentUser.password, state]);
 
@@ -57,7 +57,7 @@ const useUserForm = (user) => {
     const newUser = {
       id: currentUser.id,
       username,
-      password: password === '' ? currentUser.password : UsersModel.encrypt(newPassword),
+      password: _.isEmpty(password) ? currentUser.password : UsersModel.encrypt(newPassword),
       profile: { firstName, lastName, avatar },
     };
     try {
@@ -163,6 +163,7 @@ const UserProfilePage = () => {
               name="newPassword"
               value={newPassword}
               onChange={handleChange}
+              disabled={password.length === 0}
             />
           </Col>
         </FormGroup>
