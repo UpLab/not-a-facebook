@@ -59,7 +59,7 @@ const UserProfilePage = () => {
       <Form onSubmit={handleSubmit}>
         <FormGroup row>
           <Col sm={12}>
-            <Media className="avatar" src={avatar} height={150} width={150} />
+            <Media className="avatar" src={avatar} />
           </Col>
         </FormGroup>
         <FormGroup row>
@@ -125,7 +125,11 @@ const UserProfilePage = () => {
         </FormGroup>
         <FormGroup check row>
           <Col sm={{ offset: 9 }}>
-            <Button>Submit</Button>
+            <Button
+              className="button"
+            >
+              Submit
+            </Button>
           </Col>
         </FormGroup>
       </Form>

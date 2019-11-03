@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, CardImg, CardBody, CardTitle,
+  Card, CardImg, CardBody, CardTitle, Button,
 } from 'reactstrap';
 import UserModel from '../modules/users';
 
@@ -14,7 +14,11 @@ class UserPage extends React.Component {
     return (
       <div>
         <Card>
-          <CardImg style={{ width: 200, height: 200 }} className="avatar" src={profile.avatar} />
+          <CardImg className="avatar mt-3" src={profile.avatar} />
+          <CardTitle className="mr-auto ml-auto">
+            <Button className="button">Follow</Button>
+            <Button className="button">Message</Button>
+          </CardTitle>
           <CardBody>
             <CardTitle>{profile.firstName}</CardTitle>
             <CardTitle>{profile.lastName}</CardTitle>
