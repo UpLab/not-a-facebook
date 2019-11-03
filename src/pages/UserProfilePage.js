@@ -5,6 +5,7 @@ import {
   Col, Form, Button, FormGroup, Label, Input, Media, Spinner,
 } from 'reactstrap';
 import { toast } from 'react-toastify';
+import _ from 'lodash';
 import ThemeContext from '../contexts/Theme';
 import UsersModel from '../modules/users';
 import Uploader from '../modules/uploader';
@@ -35,51 +36,47 @@ const useUserForm = (user) => {
     } = state;
     const userByUserName = UsersModel.getUserByUsername(username);
     const encryptPassword = UsersModel.encrypt(password);
-    if (password !== '' && encryptPassword !== currentUser.password) throw new Error('invalid password');
-    if (password !== '' && newPassword === '') throw new Error('invalid  new password');
+    if (!_.isEmpty(password) && encryptPassword !== currentUser.password) throw new Error('invalid password');
+    if (!_.isEmpty(password) && _.isEmpty(newPassword)) throw new Error('invalid  new password');
     if (userByUserName && userByUserName.id !== currentUser.id) throw new Error('Username already taken!');
-    if (firstName !== '' && lastName !== '' && username !== '') return true;
-    throw new Error('invalid date');
+    if (_.isEmpty(firstName) && _.isEmpty(lastName) && _.isEmpty(username)) throw new Error('invalid date');
+    return true;
   }, [currentUser.id, currentUser.password, state]);
+
+  const uploadAvatar = async (newAvatar) => {
+    const url = await Uploader.upload(newAvatar);
+    return url;
+  };
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     let newAvatar = e.target.newAvatar.files[0];
-    let newUser;
     const {
       firstName, lastName, password, newPassword, username, avatar,
     } = state;
+    const newUser = {
+      id: currentUser.id,
+      username,
+      password: password === '' ? currentUser.password : UsersModel.encrypt(newPassword),
+      profile: { firstName, lastName, avatar },
+    };
     try {
-      if (password === '') {
-        newUser = {
-          id: currentUser.id,
-          username,
-          profile: { firstName, lastName, avatar },
-        };
-      } else {
-        newUser = {
-          id: currentUser.id,
-          username,
-          password: UsersModel.encrypt(newPassword),
-          profile: { firstName, lastName, avatar },
-        };
-      }
       validation();
       if (newAvatar) {
         setState((s) => ({ ...s, isUploading: true }));
-        const url = await Uploader.upload(newAvatar);
-        newAvatar = url || avatar;
+        newAvatar = await uploadAvatar(newAvatar) || avatar;
         setState((s) => ({ ...s, avatar: newAvatar, isUploading: false }));
         newUser.profile.avatar = newAvatar;
       }
 
       UsersModel.update(newUser);
+      currentUser.password = newUser.password;
       toast.success('Success');
     } catch (error) {
       setState((s) => ({ ...s, isUploading: false }));
       toast.error(error.message);
     }
-  }, [currentUser.id, state, validation]);
+  }, [currentUser.id, currentUser.password, state, validation]);
 
   return [state, handleChange, handleSubmit];
 };
