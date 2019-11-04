@@ -2,9 +2,13 @@ html, body {
   background-color: #efefef;
 }
 
+a:hover {
+  text-decoration: none;
+  color: #494949;
+}
+
 .container {
-  background-color: white;
-  max-width: 550px;
+  max-width: 600px;
 }
 
 .login-form {
@@ -12,7 +16,7 @@ html, body {
 }
 
 .post-form {
-  margin: 10px;
+  margin-bottom: 10px;
 }
 
 .login-form {
@@ -31,7 +35,51 @@ button {
 }
 
 .avatar {
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   margin-left: auto; 
   margin-right: auto;
+}
+
+.nav-bar {
+  background-color: #24292e;
+  color: white;
+}
+
+.nav-bar a {
+  color: white;
+}
+
+.nav-bar a:hover {
+  color: #C0C0C0;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.drop-item {
+  margin: 3px;
+  margin-left: 8px;
+  margin-right: 0;
+  padding: 0;
+  font-size: 15px;
+}
+
+.login {
+  text-align: center;
+  margin-top: 20%;
+}
+
+.login-input {
+  width: 70%;
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+.button {
+  background-color: #24292e;
 }

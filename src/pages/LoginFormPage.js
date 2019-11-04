@@ -16,13 +16,14 @@ const LoginForm = (props) => {
 
   return (
     <div>
-      <h2 className="text-center">{isLogin ? 'Login' : 'Create an account'}</h2>
+      <h2 className="login">{isLogin ? 'Login' : 'Create an account'}</h2>
       <Form onSubmit={handleSubmit}>
         <div className="login-form">
           <Alert color="danger" isOpen={errLogin.active}>
             {errLogin.msg}
           </Alert>
           <Input
+            className="login-input"
             type="text"
             name="username"
             placeholder="Username"
@@ -31,6 +32,7 @@ const LoginForm = (props) => {
             onChange={handleChange}
           />
           <Input
+            className="login-input"
             type="password"
             name="password"
             placeholder="password"
@@ -40,9 +42,8 @@ const LoginForm = (props) => {
             onChange={handleChange}
           />
           <Button
-            className="login-form-submit"
+            className="button"
             type="submit"
-            color="secondary"
             disabled={!(username && password)}
           >
             {isLogin ? 'Log In' : 'Sign Up'}

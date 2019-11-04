@@ -18,9 +18,10 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
   };
   return (
-    <Form onSubmit={handleSubmit}>
-      <h2 className="text-center">Password reset</h2>
+    <Form onSubmit={handleSubmit} className="text-center">
+      <h2 className="login text-center">Password reset</h2>
       <Input
+        className="login-input"
         type="text"
         name="username"
         placeholder="Username"
@@ -28,17 +29,16 @@ const ForgotPasswordPage = () => {
         onChange={updateField}
       />
       <Button
-        className="login-form-submit"
+        className="button"
         type="submit"
         color="secondary"
         disabled={!form.username}
       >
-                Submit
+        Submit
       </Button>
       <div>
                 Don&apos;t have an account? <Link to={routes.signUp}>Sign up</Link>
         <br />
-                Forgot password? <Link to={routes.forgotPassword}>Reset password</Link>
       </div>
     </Form>
   );

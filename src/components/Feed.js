@@ -1,13 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
-  Card, CardBody, Button,
-  ListGroupItem, Media, TabContent, TabPane, Nav, NavItem, NavLink,
+  Card, CardBody, CardText, CardTitle, Media,
+  Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+  Nav, NavItem, NavLink, TabContent, TabPane, ListGroupItem,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
+import moment from 'moment';
 import UsersModel from '../modules/users';
 import routes from '../routes';
-import { createTimeAgo } from '../utils/creators';
+// import { createTimeAgo } from '../utils/creators';
 
 // eslint-disable-next-line no-unused-vars
 const Post = ({
@@ -16,47 +18,46 @@ const Post = ({
   const me = useMemo(() => UsersModel.me(), []);
   const owner = useMemo(() => UsersModel.getUser(ownerId), [ownerId]);
   const { avatar, firstName, lastName } = owner.profile;
-  const time = createTimeAgo(createdAt);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <div className="post-form">
-
-      <Card className="post-card border-0 " outline color="secondary">
+      <Card>
+        <span className="d-flex mb-0">
+          <CardBody className="pb-2 pl-2 pt-2">
+            <span className="d-flex">
+              <Media
+                className="icon"
+                src={avatar}
+                alt="pic"
+              />
+              <Link to={`${routes.profile}/${owner.username}`} className="text-dark mt-2 ml-2">
+                {` ${firstName}`} {lastName}<br />
+                <small>{moment(createdAt).fromNow()}</small>
+              </Link>
+            </span>
+          </CardBody>
+          <CardTitle>
+            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+              <DropdownToggle className="text-dark bg-white border border-white 2rem mt-0 pt-0 pr-2 btn-outline-light">
+                ...
+              </DropdownToggle>
+              <DropdownMenu>
+                {
+                  me.id === ownerId
+                    ? <DropdownItem className="drop-item" onClick={handleRemovePost}>Remove</DropdownItem>
+                    : null
+                }
+                <DropdownItem className="drop-item">Edit</DropdownItem>
+                <DropdownItem className="drop-item">Save</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </CardTitle>
+        </span>
+        <hr className="m-0" />
         <CardBody>
-          <ListGroupItem style={{ backgroundColor: 'beige', minHeight: '57px' }}>
-            <Media
-              className="float-left my-auto"
-              left
-              width="35px"
-              height="35px"
-              src={avatar}
-              style={{ borderRadius: '50%', marginRight: '5px' }}
-              alt="pic"
-            />
-            <Link
-              className="text-body float-left my-auto"
-              to={`${routes.profile}/${me.id !== ownerId ? owner.username : ''}`}
-              style={{ paddingTop: '5px' }}
-            >
-              {firstName} {lastName}
-            </Link>
-            <p
-              className="text-muted float-left my-auto"
-              style={{ paddingTop: '5px', marginLeft: '3px' }}
-            >· {time}
-            </p>
-            {me.id === ownerId
-              ? <Button
-                className="float-right my-auto"
-                style={{
-                  border: '0px', backgroundColor: 'transparent', fontWeight: 'bold', color: 'black',
-                }}
-                onClick={handleRemovePost}
-              >X</Button> : null}
-
-          </ListGroupItem>
-          <ListGroupItem style={{ minHeight: 'inherit' }}>
-            <p className="text-muted">{body}</p>
-          </ListGroupItem>
+          <CardText tag="span"><p>{body}</p></CardText>
         </CardBody>
       </Card>
     </div>
