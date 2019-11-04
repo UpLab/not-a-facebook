@@ -13,10 +13,10 @@ import routes from '../routes';
 
 // eslint-disable-next-line no-unused-vars
 const Post = ({
-  body, ownerId, handleRemovePost, createdAt,
+  body, creator: owner, handleRemovePost, createdAt,
 }) => {
   const me = useMemo(() => UsersModel.me(), []);
-  const owner = useMemo(() => UsersModel.getUser(ownerId), [ownerId]);
+  const { id: ownerId } = owner;
   const { avatar, firstName, lastName } = owner.profile;
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
