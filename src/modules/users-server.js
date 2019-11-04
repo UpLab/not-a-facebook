@@ -86,6 +86,17 @@ class Users {
     return user;
   }
 
+  updateAccount = (user) => {
+    const { id } = user;
+    const isExist = !!this.collection.findOne({ id });
+    if (!isExist) {
+      throw new Error('User not found!');
+    }
+    this.collection.updateOne({ id }, user, true);
+
+    return user;
+  }
+
   findUserById = (id) => _.find(this.collection.find(), { id });
 
   addAccessTokenToUser = (user) => {

@@ -23,6 +23,7 @@ module.exports = {
     'linebreak-style': 'off',
     'react/jsx-wrap-multilines': 'off',
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    "indent": ["error", 2, { "ignoredNodes": ["JSXElement"] }],
   }
 };
