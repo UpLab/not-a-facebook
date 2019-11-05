@@ -1,7 +1,8 @@
 
 import { useReducer, useCallback } from 'react';
 import faker from 'faker';
-import UsersModel from '../modules/users';
+import useAuthHandlers from './useAuthHandlers';
+// import UsersModel from '../modules/users';
 import routes from '../routes';
 
 const reduce = (state, action) => {
@@ -28,21 +29,23 @@ const useLoginForm = (props) => {
     errLogin: { active: false, msg: '' },
   });
 
-  const handleSubmit = (e) => {
+  const { createAccount, login } = useAuthHandlers();
+
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
     const { history, isLogin } = props;
     const { username, password } = state;
     try {
       if (isLogin) {
-        UsersModel.login(username, password);
+        login(username, password);
       } else {
-        UsersModel.createAccount(username, password, mockProfile());
+        createAccount(username, password, mockProfile());
       }
       history.push(routes.feed);
     } catch (err) {
       dispatch({ type: 'err', msg: err.toString() });
     }
-  };
+  }, [createAccount, login, props, state]);
 
   // handleLogOut = (e) => {
   //   e.preventDefault();

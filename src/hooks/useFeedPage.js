@@ -10,7 +10,7 @@ const POSTS_QUERY = gql`
       body
       createdAt
       creator {
-        id
+        _id
         profile {
           firstName
           lastName
@@ -51,6 +51,7 @@ const useFeedPage = () => {
     }).then(console.log).catch(console.warn);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleRemovePost = (post) => {
     // TODO: handle remove post
     console.warn('remove post is temporarily unavailable');
