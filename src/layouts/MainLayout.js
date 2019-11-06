@@ -10,19 +10,16 @@ import {
   NavLink,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import UsersModel from '../modules/users';
 import routes from '../router/routes';
+import useAuthHandlers from '../hooks/useAuthHandlers';
 import ThemeContext from '../contexts/Theme';
 
-const MainLayout = ({ children, history }) => {
+const MainLayout = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
-  const handleLogout = useCallback(() => {
-    UsersModel.logout();
-    history.replace(routes.login);
-  }, [history]);
+  const { logout } = useAuthHandlers();
 
   const [theme, setTheme] = React.useState('light');
 
@@ -52,7 +49,7 @@ const MainLayout = ({ children, history }) => {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="#" onClick={handleLogout}>
+              <NavLink href="#" onClick={logout}>
                 Log out
               </NavLink>
             </NavItem>

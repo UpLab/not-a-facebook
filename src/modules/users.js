@@ -41,10 +41,7 @@ export class Users {
     this.currentUser = this.me(this.token);
   }
 
-  logout = (skipServer) => {
-    if (!skipServer) {
-      UsersServer.logout(this.token);
-    }
+  logout = () => {
     this.setToken({ token: '' });
     this.currentUser = null;
   }

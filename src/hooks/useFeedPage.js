@@ -1,6 +1,8 @@
+/* eslint-disable new-cap */
 import { useCallback } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
+import uuid from 'uuid';
 import { gql } from 'apollo-boost';
 import useMe from './useMe';
 // import PostsModel from '../modules/posts';
@@ -43,14 +45,35 @@ const ADD_POST_MUTATION = gql`
 
 const useFeedPage = () => {
   const [user] = useMe();
-  const { loading, data } = useQuery(POSTS_QUERY);
-  const [addPost] = useMutation(ADD_POST_MUTATION);
+  const { loading, data } = useQuery(POSTS_QUERY, {
+    pollInterval: 5000,
+  });
+  const [addPost] = useMutation(ADD_POST_MUTATION, {
+    refetchQueries: [{ query: POSTS_QUERY }],
+    update: (cache, { data: { addPost: post } }) => {
+      const { posts: prevPosts } = cache.readQuery({ query: POSTS_QUERY });
+      const posts = [post, ...prevPosts];
+      cache.writeQuery({
+        query: POSTS_QUERY,
+        data: { posts },
+      });
+    },
+  });
   const posts = data && data.posts ? data.posts : [];
 
   const handleAddPost = useCallback(async (body) => {
     try {
       await addPost({
         variables: { body, createdBy: user && user._id },
+        optimisticResponse: {
+          addPost: {
+            _id: uuid(),
+            body,
+            createdAt: String(new Date().getTime()),
+            creator: user,
+            __typename: 'Post',
+          },
+        },
       });
       toast.success('Published a new post');
     } catch (error) {

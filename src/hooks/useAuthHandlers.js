@@ -49,6 +49,12 @@ const LOGIN = gql`
   }
 `;
 
+const LOGOUT = gql`
+  mutation logout {
+    logout
+  }
+`;
+
 const useAuthHandlers = () => {
   const client = useApolloClient();
 
@@ -64,6 +70,12 @@ const useAuthHandlers = () => {
       client.query({ query: ME_QUERY, fetchPolicy: 'network-only' });
     },
   });
+
+  const logout = useCallback(() => {
+    client.mutate({ mutation: LOGOUT });
+    UserModel.setToken('');
+    client.cache.writeQuery({ query: ME_QUERY, data: { me: null } });
+  }, [client]);
 
   const createAccount = useCallback(async (username, password, profile) => {
     const { data: { createAccount: data } } = await createAccountMutate({
@@ -82,7 +94,7 @@ const useAuthHandlers = () => {
     return data;
   }, [loginMutate]);
 
-  return { createAccount, login };
+  return { createAccount, login, logout };
 };
 
 export default useAuthHandlers;

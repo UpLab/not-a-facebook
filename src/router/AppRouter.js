@@ -12,8 +12,8 @@ import NotFoundPage from '../pages/NotFoundPage';
 import MainLayout from '../layouts/MainLayout';
 import routes from './routes';
 
-const AppRouter = (p) => (
-  <MainLayout {...p}>
+const AppRouter = () => (
+  <MainLayout>
     <Switch>
       <Route path={routes.feed} render={(props) => <FeedPage {...props} />} />
       <Route
