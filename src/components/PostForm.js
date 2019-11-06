@@ -5,8 +5,8 @@ import {
 } from 'reactstrap';
 import usePostForm from '../hooks/usePostForm';
 
-const PostForm = (props) => {
-  const [state, handleSubmit, handleChange] = usePostForm(props);
+const PostForm = ({ onSubmit }) => {
+  const [state, handleSubmit, handleChange] = usePostForm(onSubmit);
   const { body, textAreaVisible } = state;
 
   return (

@@ -1,7 +1,5 @@
 
 import { useReducer, useCallback } from 'react';
-import { createPost } from '../utils/creators';
-import UsersModule from '../modules/users';
 
 const reduce = (state, action) => {
   switch (action.type) {
@@ -16,26 +14,26 @@ const reduce = (state, action) => {
   }
 };
 
-const usePostForm = (props) => {
+const usePostForm = (handleAddPost) => {
   const [state, dispatch] = useReducer(reduce, {
     textAreaVisible: true,
-    curUser: UsersModule.me(),
     body: '',
   });
 
-  const toggleTextArea = () => {
+  const toggleTextArea = useCallback(() => {
     // eslint-disable-next-line react/destructuring-assignment
     dispatch({ type: 'changeVisible', visible: !state.textAreaVisible });
-  };
+  }, [state.textAreaVisible]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    const { curUser } = state;
-    const { handleAddPost } = props;
-    const post = createPost(e.target.body.value, curUser);
-    handleAddPost(post);
-    dispatch({ type: 'setBody', body: '' });
-  };
+    try {
+      await handleAddPost(e.target.body.value);
+      dispatch({ type: 'setBody', body: '' });
+    } catch (error) {
+      // Do nothing
+    }
+  }, [handleAddPost]);
 
   const handleChange = useCallback((e) => {
     dispatch({ type: 'inputValueChange', name: e.target.name, value: e.target.value });

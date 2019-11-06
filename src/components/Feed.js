@@ -7,16 +7,16 @@ import {
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import moment from 'moment';
-import UsersModel from '../modules/users';
-import routes from '../routes';
+import useMe from '../hooks/useMe';
+import routes from '../router/routes';
 // import { createTimeAgo } from '../utils/creators';
 
 // eslint-disable-next-line no-unused-vars
 const Post = ({
   body, creator: owner, handleRemovePost, createdAt,
 }) => {
-  const me = useMemo(() => UsersModel.me(), []);
-  const { id: ownerId } = owner;
+  const [me] = useMe();
+  const { _id: ownerId } = owner;
   const { avatar, firstName, lastName } = owner.profile;
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -34,7 +34,7 @@ const Post = ({
               />
               <Link to={`${routes.profile}/${owner.username}`} className="text-dark mt-2 ml-2">
                 {` ${firstName}`} {lastName}<br />
-                <small>{moment(createdAt).fromNow()}</small>
+                <small>{moment(createdAt, 'x').fromNow()}</small>
               </Link>
             </span>
           </CardBody>
@@ -45,7 +45,7 @@ const Post = ({
               </DropdownToggle>
               <DropdownMenu>
                 {
-                  me.id === ownerId
+                  me._id === ownerId
                     ? <DropdownItem className="drop-item" onClick={handleRemovePost}>Remove</DropdownItem>
                     : null
                 }
@@ -66,14 +66,13 @@ const Post = ({
 
 
 const Feed = ({ posts, handleRemovePost }) => {
-  const me = useMemo(() => UsersModel.me(), []);
+  const me = useMe();
   const [activeTab, setActiveTab] = useState('1');
-  const toggle = (tab) => {
+  const toggle = React.useCallback((tab) => {
     if (activeTab !== tab) setActiveTab(tab);
-  };
+  }, [activeTab]);
   const myPosts = useMemo(() => posts.filter((post) => (
-    me.id === post.ownerId)), [me.id, posts]);
-
+    me._id === post.ownerId)), [me._id, posts]);
   return (
     <div>
       <Nav tabs>
@@ -99,8 +98,8 @@ const Feed = ({ posts, handleRemovePost }) => {
           <>
             {posts.map((post) => (
               <Post
-                key={post.id}
-                handleRemovePost={() => handleRemovePost({ id: post.id })}
+                key={post._id}
+                handleRemovePost={() => handleRemovePost({ _id: post._id })}
                 {...post}
 
               />
@@ -111,8 +110,8 @@ const Feed = ({ posts, handleRemovePost }) => {
           <>
             {myPosts.length > 0 ? myPosts.map((post) => (
               <Post
-                key={post.id}
-                handleRemovePost={() => handleRemovePost({ id: post.id })}
+                key={post._id}
+                handleRemovePost={() => handleRemovePost({ _id: post._id })}
                 {...post}
               />)) : (
                 <Card className="post-card border-0 " outline color="secondary">

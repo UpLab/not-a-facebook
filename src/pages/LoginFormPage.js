@@ -4,7 +4,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import useLoginForm from '../hooks/useLoginForm';
-import routes from '../routes';
+import routes from '../router/routes';
 
 const LoginForm = (props) => {
   const [state, handleSubmit, handleChange] = useLoginForm(props);

@@ -1,12 +1,14 @@
-// import { useState } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { toast } from 'react-toastify';
 import { gql } from 'apollo-boost';
+import useMe from './useMe';
 // import PostsModel from '../modules/posts';
 
 const POSTS_QUERY = gql`
   query {
     posts {
-      id
+      _id
       body
       createdAt
       creator {
@@ -24,11 +26,11 @@ const POSTS_QUERY = gql`
 const ADD_POST_MUTATION = gql`
   mutation ($body: String!) {
     addPost(body: $body) {
-      id
+      _id
       body
       createdAt
       creator {
-        id
+        _id
         profile {
           firstName
           lastName
@@ -40,16 +42,22 @@ const ADD_POST_MUTATION = gql`
 `;
 
 const useFeedPage = () => {
+  const [user] = useMe();
   const { loading, data } = useQuery(POSTS_QUERY);
   const [addPost] = useMutation(ADD_POST_MUTATION);
   const posts = data && data.posts ? data.posts : [];
 
-  const handleAddPost = (post) => {
-    // TODO: handle errors
-    addPost({
-      variables: { body: post.body },
-    }).then(console.log).catch(console.warn);
-  };
+  const handleAddPost = useCallback(async (body) => {
+    try {
+      await addPost({
+        variables: { body, createdBy: user && user._id },
+      });
+      toast.success('Published a new post');
+    } catch (error) {
+      toast.error(error.message);
+      throw error;
+    }
+  }, [addPost, user]);
 
   // eslint-disable-next-line no-unused-vars
   const handleRemovePost = (post) => {

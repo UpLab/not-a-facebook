@@ -3,7 +3,7 @@ import { useReducer, useCallback } from 'react';
 import faker from 'faker';
 import useAuthHandlers from './useAuthHandlers';
 // import UsersModel from '../modules/users';
-import routes from '../routes';
+import routes from '../router/routes';
 
 const reduce = (state, action) => {
   switch (action.type) {

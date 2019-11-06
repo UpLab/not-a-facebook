@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Button, Form } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import routes from '../routes';
+import routes from '../router/routes';
 
 const ForgotPasswordPage = () => {
   const [form, setValues] = useState({
