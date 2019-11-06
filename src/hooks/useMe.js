@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 
-const ME_QUERY = gql`
+export const ME_QUERY = gql`
   query me {
     me {
       _id

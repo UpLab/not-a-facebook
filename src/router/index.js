@@ -9,6 +9,7 @@ import AppRouter from './AppRouter';
 
 const RootRouter = () => {
   const [isLoggedIn, loading] = useMe();
+  console.log(isLoggedIn);
   if (loading) {
     return (
       <Spinner />

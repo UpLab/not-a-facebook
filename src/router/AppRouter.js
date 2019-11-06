@@ -27,6 +27,8 @@ const AppRouter = (p) => (
         render={(props) => <UserPage {...props} />}
       />
       <Redirect from={routes.home} to={routes.feed} exact />
+      <Redirect from={routes.login} to={routes.feed} exact />
+      <Redirect from={routes.signUp} to={routes.feed} exact />
       <Route render={(props) => <NotFoundPage {...props} />} />
     </Switch>
   </MainLayout>

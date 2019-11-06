@@ -3,13 +3,18 @@ import {
   Form, Input, Button, Alert,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import useLoginForm from '../hooks/useLoginForm';
 import routes from '../router/routes';
 
 const LoginForm = (props) => {
-  const [state, handleSubmit, handleChange] = useLoginForm(props);
+  const { isLogin, history } = props;
+  const onSuccess = React.useCallback(({ user }) => {
+    toast.success(`Welcome ${user.username}!`);
+    history.push(routes.home);
+  }, [history]);
+  const [state, handleSubmit, handleChange] = useLoginForm({ isLogin, onSuccess });
 
-  const { isLogin } = props;
   const {
     username, password, errLogin,
   } = state;

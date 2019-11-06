@@ -3,7 +3,7 @@ import { useReducer, useCallback } from 'react';
 import faker from 'faker';
 import useAuthHandlers from './useAuthHandlers';
 // import UsersModel from '../modules/users';
-import routes from '../router/routes';
+// import routes from '../router/routes';
 
 const reduce = (state, action) => {
   switch (action.type) {
@@ -22,7 +22,7 @@ const mockProfile = () => ({
   avatar: faker.internet.avatar(),
 });
 
-const useLoginForm = (props) => {
+const useLoginForm = ({ isLogin, onSuccess }) => {
   const [state, dispatch] = useReducer(reduce, {
     username: '',
     password: '',
@@ -31,21 +31,25 @@ const useLoginForm = (props) => {
 
   const { createAccount, login } = useAuthHandlers();
 
-  const handleSubmit = useCallback((e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    const { history, isLogin } = props;
     const { username, password } = state;
     try {
+      let data;
       if (isLogin) {
-        login(username, password);
+        data = await login(username, password);
       } else {
-        createAccount(username, password, mockProfile());
+        data = await createAccount(username, password, mockProfile());
       }
-      history.push(routes.feed);
+      onSuccess(data);
     } catch (err) {
-      dispatch({ type: 'err', msg: err.toString() });
+      let { message } = err;
+      if (err.graphQLErrors) {
+        message = err.graphQLErrors.map((error) => error.message).join('\n');
+      }
+      dispatch({ type: 'err', msg: message });
     }
-  }, [createAccount, login, props, state]);
+  }, [createAccount, isLogin, login, onSuccess, state]);
 
   // handleLogOut = (e) => {
   //   e.preventDefault();
