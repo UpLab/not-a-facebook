@@ -8,7 +8,7 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "build": "webpack",
-    "start": "webpack-dev-server --port 3000 --hot --host 0.0.0.0",
+    "start": "webpack-dev-server",
     "release": "standard-version",
     "release:major": "npm run release -- --release-as major",
     "release:minor": "npm run release -- --release-as minor",

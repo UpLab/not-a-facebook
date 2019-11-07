@@ -16,7 +16,7 @@ const Post = ({
   body, creator: owner, handleRemovePost, createdAt,
 }) => {
   const [me] = useMe();
-  const { _id: ownerId } = owner;
+  const { _id: ownerId, username } = owner;
   const { avatar, firstName, lastName } = owner.profile;
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -32,7 +32,7 @@ const Post = ({
                 src={avatar}
                 alt="pic"
               />
-              <Link to={`${routes.profile}/${owner.username}`} className="text-dark mt-2 ml-2">
+              <Link to={`${routes.profile}/${username}`} className="text-dark mt-2 ml-2">
                 {` ${firstName}`} {lastName}<br />
                 <small>{moment(createdAt, 'x').fromNow()}</small>
               </Link>

@@ -15,6 +15,7 @@ const POSTS_QUERY = gql`
       createdAt
       creator {
         _id
+        username
         profile {
           firstName
           lastName
@@ -33,6 +34,7 @@ const ADD_POST_MUTATION = gql`
       createdAt
       creator {
         _id
+        username
         profile {
           firstName
           lastName
@@ -85,7 +87,7 @@ const useFeedPage = () => {
   // eslint-disable-next-line no-unused-vars
   const handleRemovePost = (post) => {
     // TODO: handle remove post
-    console.warn('remove post is temporarily unavailable');
+    // console.warn('remove post is temporarily unavailable');
     // PostsModel.remove(post);
     // const list = PostsModel.get();
     // setPosts(list);
