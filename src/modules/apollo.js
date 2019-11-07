@@ -29,7 +29,7 @@ query {
 client
   .query({
     query: ME,
-  })
-  .then((result) => console.log(result));
+  });
+
 
 export default client;

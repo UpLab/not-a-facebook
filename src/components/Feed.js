@@ -32,7 +32,10 @@ const Post = ({
                 src={avatar}
                 alt="pic"
               />
-              <Link to={`${routes.profile}/${owner.username}`} className="text-dark mt-2 ml-2">
+              <Link
+                to={me._id === ownerId ? `${routes.profile}` : `${routes.profile}/${owner.username}`}
+                className="text-dark mt-2 ml-2"
+              >
                 {` ${firstName}`} {lastName}<br />
                 <small>{moment(createdAt, 'x').fromNow()}</small>
               </Link>

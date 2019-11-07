@@ -1,5 +1,5 @@
 import React, {
-  useContext, useMemo, useState, useCallback,
+  useContext, useState, useCallback,
 } from 'react';
 import {
   Col, Form, Button, FormGroup, Label, Input, Media, Spinner,
@@ -10,16 +10,16 @@ import ThemeContext from '../contexts/Theme';
 import UsersModel from '../modules/users';
 import Uploader from '../modules/uploader';
 import Select from '../components/Select';
+import useMe from '../hooks/useMe';
 
-
-const useUserForm = (user) => {
-  const currentUser = useMemo(() => user || UsersModel.me(), [user]);
+const useUserForm = () => {
+  const [me] = useMe();
   const [state, setState] = useState({
-    avatar: currentUser.profile.avatar,
+    avatar: me.profile.avatar,
     newAvatar: null,
-    username: currentUser.username,
-    firstName: currentUser.profile.firstName,
-    lastName: currentUser.profile.lastName,
+    username: me.username,
+    firstName: me.profile.firstName,
+    lastName: me.profile.lastName,
     password: '',
     newPassword: '',
     isUploading: false,
@@ -36,12 +36,12 @@ const useUserForm = (user) => {
     } = state;
     const userByUserName = UsersModel.getUserByUsername(username);
     const encryptPassword = UsersModel.encrypt(password);
-    if (!_.isEmpty(password) && encryptPassword !== currentUser.password) throw new Error('invalid password');
+    if (!_.isEmpty(password) && encryptPassword !== me.password) throw new Error('invalid password');
     if (!_.isEmpty(password) && _.isEmpty(newPassword)) throw new Error('invalid  new password');
-    if (userByUserName && userByUserName.id !== currentUser.id) throw new Error('Username already taken!');
+    if (userByUserName && userByUserName.id !== me.id) throw new Error('Username already taken!');
     if (_.isEmpty(firstName) || _.isEmpty(lastName) || _.isEmpty(username)) throw new Error('invalid date');
     return true;
-  }, [currentUser.id, currentUser.password, state]);
+  }, [me.id, me.password, state]);
 
   const uploadAvatar = async (newAvatar) => {
     const url = await Uploader.upload(newAvatar);
@@ -55,9 +55,9 @@ const useUserForm = (user) => {
       firstName, lastName, password, newPassword, username, avatar,
     } = state;
     const newUser = {
-      id: currentUser.id,
+      id: me.id,
       username,
-      password: _.isEmpty(password) ? currentUser.password : UsersModel.encrypt(newPassword),
+      password: _.isEmpty(password) ? me.password : UsersModel.encrypt(newPassword),
       profile: { firstName, lastName, avatar },
     };
     try {
@@ -70,13 +70,13 @@ const useUserForm = (user) => {
       }
 
       UsersModel.update(newUser);
-      currentUser.password = newUser.password;
+      me.password = newUser.password;
       toast.success('Success');
     } catch (error) {
       setState((s) => ({ ...s, isUploading: false }));
       toast.error(error.message);
     }
-  }, [currentUser.id, currentUser.password, state, validation]);
+  }, [me.id, me.password, state, validation]);
 
   return [state, handleChange, handleSubmit];
 };

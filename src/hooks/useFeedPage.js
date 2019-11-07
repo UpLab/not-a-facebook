@@ -15,6 +15,7 @@ const POSTS_QUERY = gql`
       createdAt
       creator {
         _id
+        username        
         profile {
           firstName
           lastName
