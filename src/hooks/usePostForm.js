@@ -28,8 +28,8 @@ const usePostForm = (handleAddPost) => {
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     try {
-      await handleAddPost(e.target.body.value);
       dispatch({ type: 'setBody', body: '' });
+      await handleAddPost(e.target.body.value);
     } catch (error) {
       // Do nothing
     }

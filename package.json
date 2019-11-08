@@ -67,6 +67,7 @@
     "moment": "^2.24.0",
     "prop-types": "15.7.2",
     "react": "16.11.0",
+    "react-confirm-alert": "^2.4.1",
     "react-dom": "16.11.0",
     "react-router-dom": "5.1.2",
     "react-toastify": "^5.4.0",

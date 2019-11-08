@@ -1,21 +1,16 @@
 import React from 'react';
-import { Spinner } from 'reactstrap';
 import Feed from '../components/Feed';
 import PostForm from '../components/PostForm';
-import useFeedPage from '../hooks/useFeedPage';
+import usePostHandlers from '../hooks/usePostHandlers';
 // import posts from '../__mocks__/posts';
 
 const FeedPage = () => {
-  const {
-    posts, handleAddPost, handleRemovePost, loading,
-  } = useFeedPage();
+  const { handleAddPost } = usePostHandlers();
 
   return (
     <>
       <PostForm onSubmit={handleAddPost} />
-      { !loading ? (
-        <Feed posts={posts} handleRemovePost={handleRemovePost} />
-      ) : <Spinner style={{ width: '2rem', height: '2rem' }} /> }
+      <Feed />
     </>
 
   );
