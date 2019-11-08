@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import uuid from 'uuid';
+import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import useMe from './useMe';
 // import PostsModel from '../modules/posts';
@@ -43,12 +44,19 @@ const ADD_POST_MUTATION = gql`
     }
   }
 `;
+const REMOVE_POST_MUTATION = gql`
+mutation ($postId: ID!) {
+  deletePost(postId: $postId)
+}
+ 
+`;
 
 const useFeedPage = () => {
   const [user] = useMe();
   const { loading, data } = useQuery(POSTS_QUERY, {
     pollInterval: 5000,
   });
+
   const [addPost] = useMutation(ADD_POST_MUTATION, {
     refetchQueries: [{ query: POSTS_QUERY }],
     update: (cache, { data: { addPost: post } }) => {
@@ -59,6 +67,10 @@ const useFeedPage = () => {
         data: { posts },
       });
     },
+  });
+
+  const [deletePost] = useMutation(REMOVE_POST_MUTATION, {
+    refetchQueries: [{ query: POSTS_QUERY, fetchPolicy: 'cache-and-network' }],
   });
   const posts = data && data.posts ? data.posts : [];
 
@@ -84,13 +96,31 @@ const useFeedPage = () => {
   }, [addPost, user]);
 
   // eslint-disable-next-line no-unused-vars
-  const handleRemovePost = (post) => {
-    // TODO: handle remove post
-    console.warn('remove post is temporarily unavailable');
-    // PostsModel.remove(post);
-    // const list = PostsModel.get();
-    // setPosts(list);
-  };
+  const handleRemovePost = useCallback(async (post) => {
+    const postId = post._id;
+    try {
+      await deletePost({
+        variables: { postId },
+        optimisticResponse: {
+          deletePost: {
+            postId,
+          },
+        },
+        update: (cache) => {
+          const { posts: currentPosts } = cache.readQuery({ query: POSTS_QUERY });
+          _.remove(currentPosts, (n) => n._id === postId);
+          cache.writeQuery({
+            query: POSTS_QUERY,
+            data: { posts: currentPosts },
+          });
+        },
+      });
+      toast.success('remove post');
+    } catch (error) {
+      toast.error(error.message);
+      throw error;
+    }
+  }, [deletePost]);
 
   return {
     posts,
