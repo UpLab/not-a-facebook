@@ -54,7 +54,6 @@ const usePostHandlers = () => {
         update: (cache) => {
           const { myPosts: currentMyPosts } = cache.readQuery({ query: MY_POSTS_QUERY });
           const { posts: currentPosts } = cache.readQuery({ query: POSTS_QUERY });
-          console.log(currentPosts);
           _.remove(currentMyPosts, (n) => n._id === postId);
           _.remove(currentPosts, (n) => n._id === postId);
           cache.writeQuery({
@@ -82,7 +81,6 @@ const usePostHandlers = () => {
       const { myPosts: prevMyPosts } = cache.readQuery({ query: MY_POSTS_QUERY });
       const posts = [post, ...prevPosts];
       const myPosts = [post, ...prevMyPosts];
-      console.log(prevPosts);
       cache.writeQuery({
         query: POSTS_QUERY,
         data: { posts },

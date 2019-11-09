@@ -9,6 +9,7 @@ import UserProfilePage from '../pages/UserProfilePage';
 import UserPage from '../pages/UserPage';
 import FeedPage from '../pages/FeedPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import ChangePasswordPage from '../pages/ChangePasswordPage';
 import MainLayout from '../layouts/MainLayout';
 import routes from './routes';
 
@@ -25,6 +26,11 @@ const AppRouter = () => (
         path={routes.profileId}
         exact
         render={(props) => <UserPage {...props} />}
+      />
+      <Route
+        path={routes.changePassword}
+        exact
+        render={(props) => <ChangePasswordPage {...props} />}
       />
       <Redirect from={routes.home} to={routes.feed} exact />
       <Redirect from={routes.login} to={routes.feed} exact />

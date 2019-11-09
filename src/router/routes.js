@@ -7,5 +7,6 @@ const routes = {
   profile: '/profile',
   profileId: '/profile/:username',
   forgotPassword: '/forgot-password',
+  changePassword: '/change-password',
 };
 export default routes;

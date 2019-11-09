@@ -6,11 +6,13 @@ import {
 } from 'reactstrap';
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
 import ThemeContext from '../contexts/Theme';
 import UsersModel from '../modules/users';
 import Uploader from '../modules/uploader';
 import Select from '../components/Select';
 import useMe from '../hooks/useMe';
+import routes from '../router/routes';
 
 const useUserForm = () => {
   const [me] = useMe();
@@ -176,16 +178,26 @@ const UserProfilePage = () => {
           </Col>
 
         </FormGroup>
-        <FormGroup check row> {isUploading ? <Spinner style={{ width: '2rem', height: '2rem' }} /> : null}
-          <Col sm={{ offset: 9 }}>
-            <Button
-              className="button"
-            >
-              Submit
-            </Button>
-          </Col>
-        </FormGroup>
+
+        {isUploading ? <Spinner style={{ width: '2rem', height: '2rem' }} /> : null}
+        <Col className="clearfix">
+          <Link to={routes.changePassword}>
+            <Button className="button" type="button" style={{ float: 'left', marginLeft: '0' }}>  Change Password</Button>
+          </Link>
+
+
+          <Button
+            style={{ float: 'right' }}
+            className="button"
+          >
+            Save changes
+          </Button>
+
+        </Col>
+
       </Form>
+
+
     </>
   );
 };
