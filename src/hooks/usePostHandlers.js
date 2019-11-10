@@ -35,11 +35,11 @@ mutation ($postId: ID!) {
 `;
 
 const usePostHandlers = () => {
+  // / const client = useApolloClient();
+
   const [user] = useMe();
 
-  const [deletePost] = useMutation(REMOVE_POST_MUTATION, {
-    refetchQueries: [{ query: POSTS_QUERY, fetchPolicy: 'cache-and-network' }],
-  });
+  const [deletePost] = useMutation(REMOVE_POST_MUTATION);
 
   const handleRemovePost = useCallback(async (post) => {
     const postId = post._id;
@@ -75,21 +75,33 @@ const usePostHandlers = () => {
 
 
   const [addPost] = useMutation(ADD_POST_MUTATION, {
-    refetchQueries: [{ query: POSTS_QUERY, fetchPolicy: 'cache-and-network' }],
+    refetchQueries: [{
+      query: POSTS_QUERY,
+      variables: { limit: 5, offset: 0 },
+      fetchPolicy: 'cache-and-network',
+    }],
     update: (cache, { data: { addPost: post } }) => {
-      const { posts: prevPosts } = cache.readQuery({ query: POSTS_QUERY });
-      const { myPosts: prevMyPosts } = cache.readQuery({ query: MY_POSTS_QUERY });
+      const { posts: prevPosts } = cache.readQuery({
+        query: POSTS_QUERY,
+        variables:
+          { limit: 5, offset: 0 },
+      });
+
+      //  const { myPosts: prevMyPosts } = cache.readQuery({ query: MY_POSTS_QUERY,
+      // variables: { limit: 5, offset: 0, } });
       const posts = [post, ...prevPosts];
-      const myPosts = [post, ...prevMyPosts];
+      // const myPosts = [post, ...prevMyPosts];
+
       cache.writeQuery({
         query: POSTS_QUERY,
+        variables: { limit: 5, offset: 0 },
         data: { posts },
       });
       //   console.log(cache.readQuery({ query: POSTS_QUERY }))
-      cache.writeQuery({
-        query: MY_POSTS_QUERY,
-        data: { myPosts },
-      });
+      // cache.writeQuery({
+      //   query: MY_POSTS_QUERY,
+      //   data: { myPosts },
+      // });
     },
   });
 

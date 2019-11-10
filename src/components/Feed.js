@@ -38,10 +38,10 @@ const Feed = () => {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
-          <TabPosts />
+          { activeTab === '1' ? <TabPosts /> : null }
         </TabPane>
         <TabPane tabId="2">
-          <TabMyPosts />
+          { activeTab === '2' ? <TabMyPosts /> : null }
         </TabPane>
       </TabContent>
 

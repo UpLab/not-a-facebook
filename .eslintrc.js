@@ -26,5 +26,6 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
     "indent": ["error", 2, { "ignoredNodes": ["JSXElement"] }],
     "import/no-cycle": "off",
+    "no-use-before-define": "off",
   }
 };
