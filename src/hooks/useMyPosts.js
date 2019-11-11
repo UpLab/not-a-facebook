@@ -27,33 +27,45 @@ export const MY_POSTS_QUERY = gql`
 const useMyPosts = () => {
   const client = useApolloClient();
 
-  const [posts, setPosts] = useState([]);
-  const { handleRemovePost } = usePostHandlers();
-  const { loading, data } = useQuery(MY_POSTS_QUERY, {
-    variables: { offset: 0, limit: 5 },
-    onCompleted: () => {
-      const { myPosts } = data;
-      setPosts((prevState) => ([...prevState, ...myPosts]));
-    },
+  const [state, setState] = useState({
+    posts: [],
+    morePost: [],
+    isFetchingMore: false,
   });
 
-  const [isFetchingMore, setIsFetching] = useInfiniteScroll(fetchMoreListItems);
+  const { handleRemovePost } = usePostHandlers();
 
+  const { data, loading } = useQuery(MY_POSTS_QUERY, {
+    variables: { limit: 5, offset: 0 },
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const setIsFetching = useInfiniteScroll(fetchMoreListItems);
 
   async function fetchMoreListItems() {
-    const { data: datas } = await client.query({
+    setState((prevState) => ({ ...prevState, isFetchingMore: true }));
+    const { data: { myPosts: newPosts } } = await client.query({
       query: MY_POSTS_QUERY,
-      variables: { offset: posts.length, limit: 2 },
+      variables:
+        { offset: state.posts.length + state.morePost.length, limit: 2 },
     });
-    const { myPosts: newPosts } = datas;
-    setPosts((prevState) => ([...prevState, ...newPosts]));
+
+    setState((prevState) => ({
+      ...prevState,
+      morePost: [...prevState.morePost, ...newPosts],
+      isFetchingMore: false,
+    }));
     setIsFetching(false);
   }
+  if (data && data.myPosts && data.myPosts.length > state.posts.length) {
+    setState((prevState) => ({ ...prevState, posts: data.myPosts }));
+  }
+
   return {
-    posts,
+    posts: [...state.posts, ...state.morePost],
     handleRemovePost,
     loading,
-    isFetchingMore,
+    isFetchingMore: state.isFetchingMore,
   };
 };
 

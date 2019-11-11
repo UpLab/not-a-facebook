@@ -18,7 +18,7 @@ const RootRouter = () => {
 
   return (
     <Router>
-      { !isLoggedIn ? (
+      {!isLoggedIn ? (
         <AuthRouter />
       ) : (
         <AppRouter />

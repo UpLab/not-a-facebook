@@ -16,8 +16,6 @@ const UserProfilePage = () => {
   } = state;
 
   const { theme, setTheme } = useContext(ThemeContext);
-  // const reversedUsername = useMemo(() => heavyReverseUsername(username), [username]);
-
   return (
     <>
       <Form onSubmit={handleSubmit}>

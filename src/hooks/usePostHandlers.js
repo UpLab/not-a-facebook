@@ -46,22 +46,37 @@ const usePostHandlers = () => {
     try {
       await deletePost({
         variables: { postId },
+        refetchQueries: [{
+          query: POSTS_QUERY,
+          variables: { limit: 5, offset: 0 },
+          fetchPolicy: 'cache-and-network',
+        }],
         optimisticResponse: {
           deletePost: {
             postId,
           },
         },
         update: (cache) => {
-          const { myPosts: currentMyPosts } = cache.readQuery({ query: MY_POSTS_QUERY });
-          const { posts: currentPosts } = cache.readQuery({ query: POSTS_QUERY });
+          const { posts: currentPosts } = cache.readQuery({
+            query: POSTS_QUERY,
+            variables: { limit: 5, offset: 0 },
+          });
+
+          const { myPosts: currentMyPosts } = cache.readQuery({
+            query: MY_POSTS_QUERY,
+            variables: { limit: 5, offset: 0 },
+          });
           _.remove(currentMyPosts, (n) => n._id === postId);
           _.remove(currentPosts, (n) => n._id === postId);
+
           cache.writeQuery({
             query: MY_POSTS_QUERY,
+            variables: { limit: 5, offset: 0 },
             data: { myPosts: currentMyPosts },
           });
           cache.writeQuery({
             query: POSTS_QUERY,
+            variables: { limit: 5, offset: 0 },
             data: { posts: currentPosts },
           });
         },
@@ -83,25 +98,28 @@ const usePostHandlers = () => {
     update: (cache, { data: { addPost: post } }) => {
       const { posts: prevPosts } = cache.readQuery({
         query: POSTS_QUERY,
-        variables:
-          { limit: 5, offset: 0 },
+        variables: { limit: 5, offset: 0 },
       });
 
-      //  const { myPosts: prevMyPosts } = cache.readQuery({ query: MY_POSTS_QUERY,
-      // variables: { limit: 5, offset: 0, } });
+      const { myPosts: prevMyPosts } = cache.readQuery({
+        query: MY_POSTS_QUERY,
+        variables: { limit: 5, offset: 0 },
+      });
+
       const posts = [post, ...prevPosts];
-      // const myPosts = [post, ...prevMyPosts];
+      const myPosts = [post, ...prevMyPosts];
 
       cache.writeQuery({
         query: POSTS_QUERY,
         variables: { limit: 5, offset: 0 },
         data: { posts },
       });
-      //   console.log(cache.readQuery({ query: POSTS_QUERY }))
-      // cache.writeQuery({
-      //   query: MY_POSTS_QUERY,
-      //   data: { myPosts },
-      // });
+
+      cache.writeQuery({
+        query: MY_POSTS_QUERY,
+        variables: { limit: 5, offset: 0 },
+        data: { myPosts },
+      });
     },
   });
 

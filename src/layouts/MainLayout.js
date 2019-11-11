@@ -23,6 +23,16 @@ const MainLayout = ({ children }) => {
 
   const [theme, setTheme] = React.useState('light');
 
+  let style;
+  if (theme === 'dark') {
+    style = {
+      backgroundColor: '#15202b',
+      color: 'white',
+    };
+    document.body.style.backgroundColor = 'rgb(21, 32, 43)';
+  } else {
+    document.body.style.backgroundColor = '#efefef';
+  }
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <Navbar className="nav-bar mb-2" dark expand="md">
@@ -56,7 +66,7 @@ const MainLayout = ({ children }) => {
           </Nav>
         </Collapse>
       </Navbar>
-      <Container>
+      <Container style={style}>
         {children}
       </Container>
     </ThemeContext.Provider>

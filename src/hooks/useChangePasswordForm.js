@@ -59,7 +59,12 @@ const useChangePasswordForm = () => {
       }
       return changePassword;
     } catch (error) {
-      toast.error(error.message);
+      let { message } = error;
+      if (error.graphQLErrors) {
+        message = error.graphQLErrors.map((err) => err.message).join('\n');
+      }
+
+      toast.error(message);
     }
     return false;
   }, [changePasswordMutation, state, validation]);
