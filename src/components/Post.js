@@ -10,7 +10,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import useMe from '../hooks/useMe';
 import routes from '../router/routes';
 import ThemeContext from '../contexts/Theme';
-
+import Theme from '../modules/theme';
 
 const Post = ({
   body, creator: owner, handleRemovePost, createdAt,
@@ -35,14 +35,7 @@ const Post = ({
       ],
     });
   };
-
-  let style;
-  if (theme === 'dark') {
-    style = {
-      backgroundColor: 'rgb(11, 16, 21)',
-      color: 'white',
-    };
-  }
+  const style = Theme.getStyle(theme);
 
   return (
     <div className="post-form">
@@ -56,18 +49,19 @@ const Post = ({
                 alt="pic"
               />
               <Link
+                style={style}
                 to={me._id === ownerId ? `${routes.profile}` : `${routes.profile}/${owner.username}`}
-                className="text-dark mt-2 ml-2"
+                className="mt-2 ml-2"
               >
                 {` ${firstName}`} {lastName}<br />
                 <small>{moment(createdAt, 'x').fromNow()}</small>
               </Link>
             </span>
           </CardBody>
-          <CardTitle className="border border-white 2rem mt-0 pt-0 pr-2 btn-outline-light">
+          <CardTitle>
 
             {me._id === ownerId
-              ? <Button className="border-0 bg-white text-dark" onClick={submit}>X</Button>
+              ? <Button style={style} className=" border-0 bg-transparent" onClick={submit}>X</Button>
               : null}
 
           </CardTitle>

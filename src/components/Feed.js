@@ -5,9 +5,6 @@ import {
 import classnames from 'classnames';
 import TabPosts from './TabPosts';
 import TabMyPosts from './TabMyPosts';
-// import { createTimeAgo } from '../utils/creators';
-
-// eslint-disable-next-line no-unused-vars
 
 
 const Feed = () => {

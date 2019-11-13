@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import routes from '../router/routes';
 import useAuthHandlers from '../hooks/useAuthHandlers';
 import ThemeContext from '../contexts/Theme';
+import Theme from '../modules/theme';
 
 const MainLayout = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,17 +22,16 @@ const MainLayout = ({ children }) => {
 
   const { logout } = useAuthHandlers();
 
-  const [theme, setTheme] = React.useState('light');
+  const [theme, setTheme] = React.useState(Theme.theme);
 
-  let style;
+  const style = Theme.getStyle(theme);
+
   if (theme === 'dark') {
-    style = {
-      backgroundColor: '#15202b',
-      color: 'white',
-    };
-    document.body.style.backgroundColor = 'rgb(21, 32, 43)';
+    Theme.setTheme(theme);
+    Theme.setDarkBackground();
   } else {
-    document.body.style.backgroundColor = '#efefef';
+    Theme.setTheme(theme);
+    Theme.setLightBackground();
   }
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

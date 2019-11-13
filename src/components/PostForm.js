@@ -5,19 +5,13 @@ import {
 } from 'reactstrap';
 import usePostForm from '../hooks/usePostForm';
 import ThemeContext from '../contexts/Theme';
+import Theme from '../modules/theme';
 
 const PostForm = ({ onSubmit }) => {
   const [state, handleSubmit, handleChange] = usePostForm(onSubmit);
   const { body, textAreaVisible } = state;
   const { theme } = useContext(ThemeContext);
-  let style;
-  if (theme === 'dark') {
-    style = {
-      backgroundColor: 'rgb(21, 32, 43)',
-      color: 'white',
-    };
-  }
-
+  const style = Theme.getStyle(theme);
   return (
     <Form onSubmit={handleSubmit}>
       {textAreaVisible && (
