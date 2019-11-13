@@ -57,7 +57,7 @@ const useMyPosts = () => {
     }));
     setIsFetching(false);
   }
-  if (data && data.myPosts && data.myPosts.length > state.posts.length) {
+  if (data && data.myPosts && data.myPosts.length !== state.posts.length) {
     setState((prevState) => ({ ...prevState, posts: data.myPosts }));
   }
 
