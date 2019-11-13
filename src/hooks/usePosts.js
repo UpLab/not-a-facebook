@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { useState, useCallback } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import usePostHandlers from './usePostHandlers';
 import useInfiniteScroll from './useInfiniteScroll';
@@ -7,7 +7,7 @@ import useInfiniteScroll from './useInfiniteScroll';
 
 export const POSTS_QUERY = gql`
   query($offset: Int!, $limit: Int!) {
-    posts(offset: $offset, limit: $limit) {
+    posts(offset: $offset, limit: $limit) @connection(key: "posts") {
       _id
       body
       createdAt
@@ -26,47 +26,44 @@ export const POSTS_QUERY = gql`
 
 
 const usePosts = () => {
-  const client = useApolloClient();
-
   const [state, setState] = useState({
-    posts: [],
-    morePost: [],
     isFetchingMore: false,
   });
 
   const { handleRemovePost } = usePostHandlers();
 
-  const { data, loading } = useQuery(POSTS_QUERY, {
+  const { data, loading, fetchMore } = useQuery(POSTS_QUERY, {
     variables: { limit: 5, offset: 0 },
     fetchPolicy: 'cache-and-network',
   });
 
+  const posts = data ? data.posts : [];
+
+  const fetchMoreListItems = useCallback(async () => {
+    setState({
+      isFetchingMore: true,
+    });
+    setIsFetching(true);
+    await fetchMore({
+      variables: {
+        offset: posts.length,
+        limit: 2,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return { ...prev, posts: [...prev.posts, ...fetchMoreResult.posts] };
+      },
+    });
+    setState({
+      isFetchingMore: false,
+    });
+    setIsFetching(false);
+  }, [posts.length, fetchMore, setIsFetching]);
 
   const setIsFetching = useInfiniteScroll(fetchMoreListItems);
 
-  async function fetchMoreListItems() {
-    setState((prevState) => ({ ...prevState, isFetchingMore: true }));
-    const { data: { posts: newPosts } } = await client.query({
-      query: POSTS_QUERY,
-      variables:
-        { offset: state.posts.length + state.morePost.length, limit: 2 },
-    });
-
-    setState((prevState) => ({
-      ...prevState,
-      morePost: [...prevState.morePost, ...newPosts],
-      isFetchingMore: false,
-    }));
-    setIsFetching(false);
-  }
-
-  if (data && data.posts && data.posts !== state.posts) {
-    setState((prevState) => ({ ...prevState, posts: data.posts }));
-  }
-
-
   return {
-    posts: [...state.posts, ...state.morePost],
+    posts,
     handleRemovePost,
     loading,
     isFetchingMore: state.isFetchingMore,
